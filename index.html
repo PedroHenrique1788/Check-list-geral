@@ -99,16 +99,28 @@
             margin-top: 40px;
         }
 
+        /* Card como link */
+        .card-link {
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            transition: all 0.3s ease;
+        }
+
+        .card-link:hover {
+            transform: translateY(-8px);
+        }
+
         .card {
             background: white;
             border-radius: 16px;
             padding: 40px 30px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
             transition: all 0.3s ease;
-            cursor: pointer;
             position: relative;
             overflow: hidden;
             border: 2px solid transparent;
+            text-align: center;
         }
 
         .card::before {
@@ -123,18 +135,13 @@
             transition: transform 0.3s ease;
         }
 
-        .card:hover::before {
+        .card-link:hover .card::before {
             transform: scaleX(1);
         }
 
-        .card:hover {
-            transform: translateY(-8px);
+        .card-link:hover .card {
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
             border-color: #667eea;
-        }
-
-        .card.available {
-            cursor: pointer;
         }
 
         .card.coming-soon {
@@ -142,9 +149,12 @@
             cursor: not-allowed;
         }
 
-        .card.coming-soon:hover {
+        .card-link.coming-soon {
+            pointer-events: none;
+        }
+
+        .card-link.coming-soon:hover {
             transform: none;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
         }
 
         .card-icon {
@@ -228,14 +238,22 @@
             }
         }
 
-        .pulse-animation {
-            animation: pulse 2s infinite;
+        /* Animações de entrada */
+        .card-link {
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.6s ease forwards;
         }
 
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
+        .card-link:nth-child(1) { animation-delay: 0.1s; }
+        .card-link:nth-child(2) { animation-delay: 0.3s; }
+        .card-link:nth-child(3) { animation-delay: 0.5s; }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
     </style>
 </head>
@@ -261,34 +279,47 @@
         </section>
 
         <div class="cards-container">
-            <div class="card available" data-checklist="payments">
-                <div class="card-icon">💳</div>
-                <h3 class="card-title">Payments</h3>
-                <p class="card-description">
-                    Gerencie e acompanhe todos os processos relacionados a pagamentos, 
-                    desde validações até confirmações finais.
-                </p>
-                <span class="card-status status-available">Disponível</span>
-            </div>
+            <!-- Card Payments - Disponível -->
+            <a href="https://victorious-forest-03396211e.1.azurestaticapps.net/payments.html" 
+               class="card-link" 
+               title="Acessar Checklist de Payments">
+                <div class="card">
+                    <div class="card-icon">💳</div>
+                    <h3 class="card-title">Payments</h3>
+                    <p class="card-description">
+                        Gerencie e acompanhe todos os processos relacionados a pagamentos, 
+                        desde validações até confirmações finais.
+                    </p>
+                    <span class="card-status status-available">Disponível</span>
+                </div>
+            </a>
 
-            <div class="card available" data-checklist="ongoing">
-                <div class="card-icon">⚡</div>
-                <h3 class="card-title">Ongoing</h3>
-                <p class="card-description">
-                    Monitore processos em andamento e mantenha o controle sobre 
-                    todas as atividades em execução.
-                </p>
-                <span class="card-status status-available">Disponível</span>
-            </div>
+            <!-- Card Ongoing - Disponível -->
+            <a href="https://victorious-forest-03396211e.1.azurestaticapps.net/ongoing.html" 
+               class="card-link" 
+               title="Acessar Checklist de Ongoing">
+                <div class="card">
+                    <div class="card-icon">⚡</div>
+                    <h3 class="card-title">Ongoing</h3>
+                    <p class="card-description">
+                        Monitore processos em andamento e mantenha o controle sobre 
+                        todas as atividades em execução.
+                    </p>
+                    <span class="card-status status-available">Disponível</span>
+                </div>
+            </a>
 
-            <div class="card coming-soon" data-checklist="ciq">
-                <div class="card-icon">🔧</div>
-                <h3 class="card-title">CIQ</h3>
-                <p class="card-description">
-                    Sistema de controle de qualidade integrado para garantir 
-                    a excelência em todos os processos.
-                </p>
-                <span class="card-status status-coming-soon">Em Construção</span>
+            <!-- Card CIQ - Em Construção -->
+            <div class="card-link coming-soon" title="Este checklist ainda está em desenvolvimento">
+                <div class="card coming-soon">
+                    <div class="card-icon">🔧</div>
+                    <h3 class="card-title">CIQ</h3>
+                    <p class="card-description">
+                        Sistema de controle de qualidade integrado para garantir 
+                        a excelência em todos os processos.
+                    </p>
+                    <span class="card-status status-coming-soon">Em Construção</span>
+                </div>
             </div>
         </div>
     </main>
@@ -298,98 +329,5 @@
             <p>&copy; 2025 Sistema de Checklists. Desenvolvido para otimizar seus processos.</p>
         </div>
     </footer>
-
-   <script>
-  // Configuração das URLs do Azure Static Web Apps
-  const AZURE_URLS = {
-    payments: 'https://victorious-forest-03396211e.1.azurestaticapps.net/payments.html',
-    ongoing: 'https://victorious-forest-03396211e.1.azurestaticapps.net/ongoing.html',
-    ciq: 'https://victorious-forest-03396211e.1.azurestaticapps.net/ciq.html'
-  };
-
-  function navigateToChecklist(type, event) {
-    try {
-      if (event && event.currentTarget) {
-        event.currentTarget.style.transform = 'scale(0.95)';
-        
-        setTimeout(() => {
-          event.currentTarget.style.transform = '';
-          
-          switch (type) {
-            case 'payments':
-              window.location.href = AZURE_URLS.payments;
-              break;
-            case 'ongoing':
-              window.location.href = AZURE_URLS.ongoing;
-              break;
-            case 'ciq':
-              // Para CIQ, vamos tentar navegar ou mostrar mensagem
-              alert('Este checklist ainda está em desenvolvimento!');
-              break;
-            default:
-              console.error('Tipo de checklist não reconhecido:', type);
-          }
-        }, 150);
-      }
-    } catch (error) {
-      console.error('Erro na navegação:', error);
-    }
-  }
-
-  // Aguardar o DOM estar completamente carregado
-  document.addEventListener('DOMContentLoaded', function() {
-    const cards = document.querySelectorAll('.card');
-    
-    if (cards.length === 0) {
-      console.warn('Nenhum card encontrado');
-      return;
-    }
-
-    cards.forEach((card, index) => {
-      // Verificar se o card existe antes de aplicar estilos
-      if (!card) return;
-
-      // Configurar estilos iniciais para animação
-      card.style.opacity = '0';
-      card.style.transform = 'translateY(30px)';
-      card.style.transition = 'all 0.6s ease';
-
-      // Animação de entrada com delay
-      setTimeout(() => {
-        card.style.opacity = '1';
-        card.style.transform = 'translateY(0)';
-      }, index * 200 + 100);
-
-      // Adicionar eventos apenas para cards disponíveis
-      if (card.classList.contains('available')) {
-        // Evento de clique
-        card.addEventListener('click', function(event) {
-          const type = this.getAttribute('data-checklist');
-          if (type) {
-            navigateToChecklist(type, event);
-          }
-        });
-
-        // Eventos de hover
-        card.addEventListener('mouseenter', function() {
-          this.style.transform = 'translateY(-8px)';
-        });
-
-        card.addEventListener('mouseleave', function() {
-          this.style.transform = 'translateY(0)';
-        });
-      }
-    });
-  });
-
-  // Fallback para navegadores mais antigos
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', function() {
-      console.log('Sistema de Checklists carregado com sucesso!');
-    });
-  } else {
-    console.log('Sistema de Checklists carregado com sucesso!');
-  }
-</script>
 </body>
 </html>
