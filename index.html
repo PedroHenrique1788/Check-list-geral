@@ -300,7 +300,7 @@
     </footer>
 
     <script>
-        function navigateToChecklist(type) {
+       function navigateToChecklist(type) {
             // Animação de clique
             event.currentTarget.style.transform = 'scale(0.95)';
             
@@ -322,60 +322,45 @@
             }, 150);
         }
 
-        // Adicionar efeito de hover mais suave
-        document.querySelectorAll('.card').forEach(card => {
-            card.addEventListener('mouseenter', function() {
-                if (this.classList.contains('available')) {
-                    this.style.transform = 'translateY(-8px)';
-                }
-            });
-            
-            card.addEventListener('mouseleave', function() {
-                if (this.classList.contains('available')) {
-                    this.style.transform = 'translateY(0)';
-                }
-            });
-        });
-
-        // Animação de entrada dos cards
         window.addEventListener('load', function() {
-    const cards = document.querySelectorAll('.card');
+            const cards = document.querySelectorAll('.card');
 
-    cards.forEach((card, index) => {
-        // Animação de entrada
-        setTimeout(() => {
-            card.style.opacity = '0';
-            card.style.transform = 'translateY(30px)';
-            card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            cards.forEach((card, index) => {
+                // Animação de entrada
+                setTimeout(() => {
+                    card.style.opacity = '0';
+                    card.style.transform = 'translateY(30px)';
+                    card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
 
-            setTimeout(() => {
-                card.style.opacity = '1';
-                card.style.transform = 'translateY(0)';
-            }, 100);
-        }, index * 200);
+                    setTimeout(() => {
+                        card.style.opacity = '1';
+                        card.style.transform = 'translateY(0)';
+                    }, 100);
+                }, index * 200);
 
-        // Clique nos cards disponíveis
-        if (card.classList.contains('available')) {
-            card.addEventListener('click', function () {
-                const type = card.getAttribute('data-checklist');
-                navigateToChecklist(type);
+                // Clique
+                if (card.classList.contains('available')) {
+                    card.addEventListener('click', function () {
+                        const type = card.getAttribute('data-checklist');
+                        navigateToChecklist(type);
+                    });
+                }
+
+                // Hover
+                card.addEventListener('mouseenter', function () {
+                    if (card.classList.contains('available')) {
+                        card.style.transform = 'translateY(-8px)';
+                    }
+                });
+
+                card.addEventListener('mouseleave', function () {
+                    if (card.classList.contains('available')) {
+                        card.style.transform = 'translateY(0)';
+                    }
+                });
             });
-        }
-
-        // Hover
-        card.addEventListener('mouseenter', function () {
-            if (card.classList.contains('available')) {
-                card.style.transform = 'translateY(-8px)';
-            }
         });
 
-        card.addEventListener('mouseleave', function () {
-            if (card.classList.contains('available')) {
-                card.style.transform = 'translateY(0)';
-            }
-        });
-    });
-}););
     </script>
 </body>
 </html>
