@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checklist de Atendimento - Pay</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #1E3A8A 0%, #3730A3 50%, #1E40AF 100%);
+      min-height: 100vh;
+      color: #fff;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding: 30px 0;
+    }
+
+    .header h1 {
+      font-size: 2.5em;
+      color: #E0E7FF;
+      margin-bottom: 10px;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+      font-weight: 600;
+    }
+
+    .header p {
+      font-size: 1.1em;
+      opacity: 0.9;
+      color: #C7D2FE;
+    }
+
+    .form-section {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 30px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+      color: #1f2937;
+    }
+
+    .form-group {
+      margin-bottom: 25px;
+    }
+
+    .form-group label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #374151;
+      font-size: 1.1em;
+    }
+
+    .form-group input, .form-group select {
+      width: 100%;
+      padding: 15px 20px;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      font-size: 16px;
+      transition: all 0.3s ease;
+      background: #f9fafb;
+    }
+
+    .form-group input:focus, .form-group select:focus {
+      outline: none;
+      border-color: #3B82F6;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+      background: white;
+    }
+
+    .tipo-selector {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      margin-bottom: 25px;
+    }
+
+    .tipo-option {
+      background: #f8fafc;
+      border: 3px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .tipo-option:hover {
+      background: #e0f2fe;
+      border-color: #3B82F6;
+      transform: translateY(-2px);
+    }
+
+    .tipo-option.active {
+      background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+      border-color: #3B82F6;
+      box-shadow: 0 8px 20px rgba(59, 130, 246, 0.2);
+    }
+
+    .tipo-option.active::after {
+      content: '✓';
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      background: #3B82F6;
+      color: white;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    .tipo-icon {
+      font-size: 2em;
+      margin-bottom: 10px;
+      display: block;
+    }
+
+    .tipo-title {
+      font-weight: 600;
+      font-size: 1.2em;
+      color: #374151;
+      margin-bottom: 5px;
+    }
+
+    .tipo-desc {
+      font-size: 0.9em;
+      color: #6b7280;
+    }
+
+    .checklist-section {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 30px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+      color: #1f2937;
+    }
+
+    .checklist-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .checklist-title {
+      font-size: 1.5em;
+      font-weight: 600;
+      color: #1E3A8A;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .progress-info {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      background: #f8fafc;
+      padding: 10px 20px;
+      border-radius: 10px;
+      border: 2px solid #e2e8f0;
+    }
+
+    .progress-circle {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: conic-gradient(#10b981 0deg, #e5e7eb 0deg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      color: #1f2937;
+      position: relative;
+    }
+
+    .progress-circle::before {
+      content: '';
+      position: absolute;
+      width: 35px;
+      height: 35px;
+      background: white;
+      border-radius: 50%;
+      z-index: 1;
+    }
+
+    .progress-text {
+      position: relative;
+      z-index: 2;
+      font-size: 0.9em;
+    }
+
+    .progress-stats {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .progress-stats span {
+      font-size: 0.9em;
+      color: #6b7280;
+    }
+
+    .progress-stats .number {
+      font-weight: 600;
+      color: #1f2937;
+    }
+
+    .checklist-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 15px;
+      margin-bottom: 30px;
+    }
+
+    .checklist-item {
+      background: #f8fafc;
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 18px 20px;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .checklist-item::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 100%;
+      width: 4px;
+      background: #e2e8f0;
+      transition: all 0.3s ease;
+    }
+
+    .checklist-item:hover {
+      background: #e0f2fe;
+      border-color: #3B82F6;
+      transform: translateX(5px);
+    }
+
+    .checklist-item:hover::before {
+      background: #3B82F6;
+    }
+
+    .checklist-item.checked {
+      background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+      border-color: #10b981;
+      color: #065f46;
+    }
+
+    .checklist-item.checked::before {
+      background: #10b981;
+    }
+
+    .checklist-item.checked::after {
+      content: '✓';
+      position: absolute;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: #10b981;
+      color: white;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 16px;
+      box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+    }
+
+    .checklist-item label {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      cursor: pointer;
+      margin: 0;
+      line-height: 1.5;
+    }
+
+    .checklist-item input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      accent-color: #3B82F6;
+      margin: 0;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .button-container {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 30px;
+    }
+
+    button {
+      padding: 15px 30px;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 160px;
+      justify-content: center;
+    }
+
+    .btn-submit {
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: white;
+    }
+
+    .btn-submit:hover {
+      background: linear-gradient(135deg, #059669, #047857);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);
+    }
+
+    .btn-submit:disabled {
+      background: #9ca3af;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .btn-clear {
+      background: linear-gradient(135deg, #ef4444, #dc2626);
+      color: white;
+    }
+
+    .btn-clear:hover {
+      background: linear-gradient(135deg, #dc2626, #b91c1c);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(239, 68, 68, 0.3);
+    }
+
+    .alert {
+      padding: 15px 20px;
+      border-radius: 12px;
+      margin-top: 20px;
+      display: none;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    .alert.success {
+      background: #d1fae5;
+      color: #065f46;
+      border: 2px solid #10b981;
+    }
+
+    .alert.error {
+      background: #fee2e2;
+      color: #991b1b;
+      border: 2px solid #ef4444;
+    }
+
+    .loading {
+      display: none;
+      text-align: center;
+      margin-top: 20px;
+      color: #6b7280;
+    }
+
+    .loading::after {
+      content: '';
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid #e5e7eb;
+      border-top: 3px solid #3B82F6;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-left: 10px;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 0 10px;
+      }
+      
+      .form-section, .checklist-section {
+        padding: 20px;
+      }
+      
+      .checklist-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .checklist-header {
+        flex-direction: column;
+        text-align: center;
+      }
+      
+      .button-container {
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      button {
+        width: 100%;
+        max-width: 300px;
+      }
+
+      .tipo-selector {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>💬 Checklist Pay</h1>
+      <p>Sistema de verificação para atendimento ao cliente</p>
+    </div>
+
+    <div class="form-section">
+      <div class="form-group">
+        <label>🎯 Tipo de Atendimento:</label>
+        <div class="tipo-selector">
+          <div class="tipo-option active" data-tipo="call" onclick="selecionarTipo('call')">
+            <span class="tipo-icon">📞</span>
+            <div class="tipo-title">Call</div>
+            <div class="tipo-desc">Atendimento por telefone</div>
+          </div>
+          <div class="tipo-option" data-tipo="chat" onclick="selecionarTipo('chat')">
+            <span class="tipo-icon">💬</span>
+            <div class="tipo-title">Chat</div>
+            <div class="tipo-desc">Atendimento por chat</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="analista">👤 RE:</label>
+        <input type="number" id="analista" placeholder="Digite seu RE" inputmode="numeric" pattern="[0-9]*">
+      </div>
+
+      <div class="form-group">
+        <label for="ticket">🎫 Ticket de Atendimento:</label>
+        <input type="text" id="ticket" placeholder="Digite o número do ticket">
+      </div>
+    </div>
+
+    <div class="checklist-section">
+      <div class="checklist-header">
+        <div class="checklist-title">
+          📋 Checklist de Atendimento <span id="tipoAtual">(Call)</span>
+        </div>
+        <div class="progress-info">
+          <div class="progress-circle" id="progressCircle">
+            <span class="progress-text" id="progressText">0%</span>
+          </div>
+          <div class="progress-stats">
+            <span>Concluído: <span class="number" id="completedCount">0</span> de <span class="number" id="totalCount">17</span></span>
+            <span>Restam: <span class="number" id="remainingCount">17</span> itens</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="checklist-grid" id="checklist"></div>
+
+      <div class="button-container">
+        <button class="btn-submit" onclick="enviarChecklist()">
+          📤 Enviar Checklist
+        </button>
+        <button class="btn-clear" onclick="limparChecklist()">
+          🗑️ Limpar Tudo
+        </button>
+      </div>
+
+      <div class="loading" id="loading">Enviando checklist...</div>
+      <div class="alert success" id="successAlert">✅ Checklist enviado com sucesso!</div>
+      <div class="alert error" id="errorAlert">❌ Erro ao enviar checklist. Tente novamente.</div>
+    </div>
+  </div>
+
+  <script>
+    // Checklists para cada tipo de atendimento
+    const checklistCall = [
+  "1 - Atender o cliente em até 20 segundos.",
+  "2 - Dar boas-vindas ao cliente usando mensagem padrão.",
+  "3 - Analisar os registros anteriores para identificar se o cliente já fez sua solicitação.",
+  "4 - Realizar a confirmação positiva avaliando o histórico da interação: caso as informações já tenham sido fornecidas ao Bot ou em outras jornadas, não solicitar novamente. Se não houver registro, solicitar os 3 primeiros dígitos do CPF e o nome completo do cliente.",
+  "5 - Identificar e analisar o cadastro do cliente.",
+  "6 - Confirmar o endereço do imóvel sobre o qual o cliente quer falar.",
+  "7 - Retornar ao cliente de tempos em tempos para manter a atualização, sem deixar de retornar no máximo até 2 minutos.",
+  "8 - Nos casos em que a solicitação do cliente puder ser atendida via app ou site QuintoAndar, direcionar o cliente ao app ou site e orientá-lo com base nos processos.",
+  "9 - Identificada a necessidade de transferência para outra jornada, utilizar a calculadora disponibilizada na Base de Conhecimento.",
+  "10 - Realizar o tagueamento para 100% dos contatos.",
+  "11 - Ao retornar ao cliente, agradeça por ter aguardado e recapitule o atendimento.",
+  "12 - Demonstre cordialidade e interesse em atender o cliente, realizando o procedimento corretamente.",
+  "13 - Nos casos de negociação de boleto, é necessário garantir que o atendimento seja realizado diretamente, sem encaminhamento para a parceira, exceto nas situações previstas em processo, como nas filas onde há orientação formal para envio à assessoria.",
+  "14 - Atenha-se às escolhas das palavras ao digitar, buscando garantir um atendimento humano e acolhedor.",
+  "15 - Garanta o registro no CRM de 100% dos contatos.",
+  "16 - Ao final da tratativa, realize um breve resumo dos pontos tratados na ligação e questione se o cliente possui alguma dúvida e se pode ajudar em algo mais.",
+  "17 - Ofereça a pesquisa em 100% dos atendimentos.",
+];
+
+const checklistChat = [
+  "1 - Atender o cliente em até 5 segundos.",
+  "2 - Dar boas-vindas ao cliente usando mensagem padrão.",
+  "3 - Usar a fraseologia de call back.",
+  "4 - Questionar o motivo de contato para entender a real necessidade do cliente.",
+  "5 - Realizar a confirmação positiva solicitando os 3 primeiros dígitos do CPF e o nome completo.",
+  "6 - Identificar e analisar o cadastro do cliente.",
+  "7 - Confirmar o endereço do imóvel sobre o qual o cliente quer falar.",
+  "8 - Nos casos em que a solicitação do cliente puder ser atendida via app ou site QuintoAndar, direcionar o cliente ao app ou site e orientá-lo com base nos processos.",
+  "9 - Identificada a necessidade de transferência para outra jornada, utilizar a calculadora disponibilizada na Base de Conhecimento.",
+  "10 - Realizar o tagueamento para 100% dos contatos.",
+  "11 - Usar o mute com consciência; durante a análise no sistema ou busca de informação, o mute não deverá ser usado.",
+  "12 - Retornar ao cliente de tempos em tempos para manter a atualização, sem deixar de retornar no máximo até 3 minutos.",
+  "13 - Ao retornar, agradeça e recapitule o atendimento.",
+  "14 - Demonstre cordialidade e interesse em atender o cliente, realizando o procedimento corretamente.",
+  "15 - Nos casos de negociação de boleto, é necessário garantir que o atendimento seja realizado diretamente, sem encaminhamento para a parceira, exceto nas situações previstas em processo, como nas filas onde há orientação formal para envio à assessoria.",
+  "16 - Garanta o registro no CRM de 100% dos contatos.",
+  "17 - Ao final da tratativa, realize um breve resumo dos pontos tratados na ligação e questione se o cliente possui alguma dúvida e se pode ajudar em algo mais.",
+  "18 - Ofereça a pesquisa em 100% dos atendimentos.",
+];
+    let tipoAtendimento = 'call'; // Padrão é Call
+    let checklistAtual = checklistCall;
+
+    const checklistContainer = document.getElementById('checklist');
+
+    function selecionarTipo(tipo) {
+      tipoAtendimento = tipo;
+      
+      // Atualizar visual dos botões
+      document.querySelectorAll('.tipo-option').forEach(option => {
+        option.classList.remove('active');
+      });
+      document.querySelector(`[data-tipo="${tipo}"]`).classList.add('active');
+      
+      // Atualizar checklist
+      checklistAtual = tipo === 'call' ? checklistCall : checklistChat;
+      document.getElementById('tipoAtual').textContent = `(${tipo === 'call' ? 'Call' : 'Chat'})`;
+      
+      // Recriar checklist
+      criarChecklist();
+      
+      // Atualizar contadores
+      document.getElementById('totalCount').textContent = checklistAtual.length;
+      document.getElementById('remainingCount').textContent = checklistAtual.length;
+      updateProgress();
+    }
+
+    function criarChecklist() {
+      checklistContainer.innerHTML = '';
+      
+      checklistAtual.forEach((item, index) => {
+        const div = document.createElement('div');
+        div.className = 'checklist-item';
+        div.innerHTML = `
+          <label>
+            <input type="checkbox" id="check${index}" onchange="updateProgress()">
+            <span>${item}</span>
+          </label>
+        `;
+        
+        // Adicionar evento de clique no div
+        div.addEventListener('click', function(e) {
+          if (e.target.type !== 'checkbox') {
+            const checkbox = this.querySelector('input[type="checkbox"]');
+            checkbox.checked = !checkbox.checked;
+            updateProgress();
+            updateItemStyle(this, checkbox.checked);
+          }
+        });
+        
+        checklistContainer.appendChild(div);
+      });
+    }
+
+    function updateItemStyle(item, checked) {
+      if (checked) {
+        item.classList.add('checked');
+      } else {
+        item.classList.remove('checked');
+      }
+    }
+
+    function updateProgress() {
+      const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+      const checkedCount = document.querySelectorAll('input[type="checkbox"]:checked').length;
+      const totalCount = checkboxes.length;
+      const percentage = totalCount > 0 ? Math.round((checkedCount / totalCount) * 100) : 0;
+
+      // Atualizar elementos visuais
+      document.getElementById('progressText').textContent = percentage + '%';
+      document.getElementById('completedCount').textContent = checkedCount;
+      document.getElementById('remainingCount').textContent = totalCount - checkedCount;
+
+      // Atualizar círculo de progresso
+      const progressCircle = document.getElementById('progressCircle');
+      const degrees = totalCount > 0 ? (checkedCount / totalCount) * 360 : 0;
+      progressCircle.style.background = `conic-gradient(#10b981 ${degrees}deg, #e5e7eb ${degrees}deg)`;
+
+      // Atualizar estilo dos itens
+      checkboxes.forEach((checkbox, index) => {
+        const item = checkbox.closest('.checklist-item');
+        updateItemStyle(item, checkbox.checked);
+      });
+    }
+
+    function limparChecklist() {
+      // Limpar os checkboxes e estilos visuais
+      const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+      checkboxes.forEach(checkbox => {
+        checkbox.checked = false;
+        const item = checkbox.closest('.checklist-item');
+        item.classList.remove('checked');
+      });
+    
+      // Limpar os campos de texto
+      const textInputs = document.querySelectorAll('input[type="text"], input[type="number"]');
+      textInputs.forEach(input => {
+        input.value = '';
+      });
+    
+      // Atualizar progresso e esconder alertas
+      updateProgress();
+      hideAlerts();
+    }
+
+    function hideAlerts() {
+      document.getElementById('successAlert').style.display = 'none';
+      document.getElementById('errorAlert').style.display = 'none';
+    }
+
+    function showLoading(show) {
+      document.getElementById('loading').style.display = show ? 'block' : 'none';
+    }
+
+    function showAlert(type, show = true) {
+      const alertElement = document.getElementById(type + 'Alert');
+      alertElement.style.display = show ? 'block' : 'none';
+    }
+
+    const endpoint = 'https://script.google.com/macros/s/AKfycbyvC_kS-iC1fFHb9F4-tm4UERLRY_eSwzNkwo7ALDNjTTexrKfoLzNEFmCtsnMpE_yU/exec';
+
+    function enviarChecklist() {
+      const analista = document.getElementById('analista').value.trim();
+      const ticket = document.getElementById('ticket').value.trim();
+
+      if (!analista || !ticket) {
+        alert("⚠️ Por favor, preencha o RE e o ticket de atendimento.");
+        return;
+      }
+
+      const respostas = checklistAtual.map((_, index) => 
+        document.getElementById(`check${index}`).checked
+      );
+
+      const checkedCount = respostas.filter(Boolean).length;
+      if (checkedCount === 0) {
+        alert("⚠️ Por favor, marque pelo menos um item do checklist.");
+        return;
+      }
+
+      hideAlerts();
+      showLoading(true);
+
+      // Desabilitar botão durante envio
+      const submitBtn = document.querySelector('.btn-submit');
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '⏳ Enviando...';
+
+      const segredo = "chave-super-secreta";
+      const token = btoa(segredo + ticket + analista);
+
+      const payload = {
+        analista: analista,
+        ticket: ticket,
+        tipoAtendimento: tipoAtendimento, // Novo campo
+        respostas: respostas,
+        token: token,
+        timestamp: new Date().toLocaleString('pt-BR'),
+        totalItens: checklistAtual.length,
+        itensCompletos: checkedCount,
+        percentual: Math.round((checkedCount / checklistAtual.length) * 100)
+      };
+
+      fetch(endpoint, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+      })
+      .then(() => {
+        showLoading(false);
+        showAlert('success');
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '📤 Enviar Checklist';
+      })
+      .catch((error) => {
+        console.error('Erro ao enviar:', error);
+        showLoading(false);
+        showAlert('error');
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '📤 Enviar Checklist';
+      });
+    }
+
+    // Inicializar
+    criarChecklist();
+    updateProgress();
+
+    // Adicionar eventos de teclado para melhor UX
+    document.getElementById('analista').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        document.getElementById('ticket').focus();
+      }
+    });
+
+    document.getElementById('ticket').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        enviarChecklist();
+      }
+    });
+  </script>
+</body>
+</html>
