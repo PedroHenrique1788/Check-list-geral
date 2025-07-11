@@ -300,7 +300,7 @@
     </footer>
 
    <script>
-  // Configuração das URLs - SUBSTITUA PELAS SUAS URLs DO AZURE
+  // Configuração das URLs do Azure Static Web Apps
   const AZURE_URLS = {
     payments: 'https://victorious-forest-03396211e.1.azurestaticapps.net/payments.html',
     ongoing: 'https://victorious-forest-03396211e.1.azurestaticapps.net/ongoing.html',
@@ -308,69 +308,88 @@
   };
 
   function navigateToChecklist(type, event) {
-    event.currentTarget.style.transform = 'scale(0.95)';
-
-    setTimeout(() => {
-      event.currentTarget.style.transform = '';
-
-      switch (type) {
-        case 'payments':
-          window.location.href = AZURE_URLS.payments;
-          break;
-        case 'ongoing':
-          window.location.href = AZURE_URLS.ongoing;
-          break;
-        case 'ciq':
-          if (AZURE_URLS.ciq) {
-            window.location.href = AZURE_URLS.ciq;
-          } else {
-            alert('Este checklist ainda está em desenvolvimento!');
+    try {
+      if (event && event.currentTarget) {
+        event.currentTarget.style.transform = 'scale(0.95)';
+        
+        setTimeout(() => {
+          event.currentTarget.style.transform = '';
+          
+          switch (type) {
+            case 'payments':
+              window.location.href = AZURE_URLS.payments;
+              break;
+            case 'ongoing':
+              window.location.href = AZURE_URLS.ongoing;
+              break;
+            case 'ciq':
+              // Para CIQ, vamos tentar navegar ou mostrar mensagem
+              alert('Este checklist ainda está em desenvolvimento!');
+              break;
+            default:
+              console.error('Tipo de checklist não reconhecido:', type);
           }
-          break;
-        default:
-          console.error('Tipo de checklist não reconhecido:', type);
+        }, 150);
       }
-    }, 150);
+    } catch (error) {
+      console.error('Erro na navegação:', error);
+    }
   }
 
-  window.addEventListener('load', function () {
+  // Aguardar o DOM estar completamente carregado
+  document.addEventListener('DOMContentLoaded', function() {
     const cards = document.querySelectorAll('.card');
+    
+    if (cards.length === 0) {
+      console.warn('Nenhum card encontrado');
+      return;
+    }
 
     cards.forEach((card, index) => {
-      // Animação de entrada
+      // Verificar se o card existe antes de aplicar estilos
+      if (!card) return;
+
+      // Configurar estilos iniciais para animação
+      card.style.opacity = '0';
+      card.style.transform = 'translateY(30px)';
+      card.style.transition = 'all 0.6s ease';
+
+      // Animação de entrada com delay
       setTimeout(() => {
-        card.style.opacity = '0';
-        card.style.transform = 'translateY(30px)';
-        card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+        card.style.opacity = '1';
+        card.style.transform = 'translateY(0)';
+      }, index * 200 + 100);
 
-        setTimeout(() => {
-          card.style.opacity = '1';
-          card.style.transform = 'translateY(0)';
-        }, 100);
-      }, index * 200);
-
-      // Clique funcional
+      // Adicionar eventos apenas para cards disponíveis
       if (card.classList.contains('available')) {
-        card.addEventListener('click', function (event) {
-          const type = card.getAttribute('data-checklist');
-          navigateToChecklist(type, event);
+        // Evento de clique
+        card.addEventListener('click', function(event) {
+          const type = this.getAttribute('data-checklist');
+          if (type) {
+            navigateToChecklist(type, event);
+          }
+        });
+
+        // Eventos de hover
+        card.addEventListener('mouseenter', function() {
+          this.style.transform = 'translateY(-8px)';
+        });
+
+        card.addEventListener('mouseleave', function() {
+          this.style.transform = 'translateY(0)';
         });
       }
-
-      // Hover
-      card.addEventListener('mouseenter', function () {
-        if (card.classList.contains('available')) {
-          card.style.transform = 'translateY(-8px)';
-        }
-      });
-
-      card.addEventListener('mouseleave', function () {
-        if (card.classList.contains('available')) {
-          card.style.transform = 'translateY(0)';
-        }
-      });
     });
   });
+
+  // Fallback para navegadores mais antigos
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function() {
+      console.log('Sistema de Checklists carregado com sucesso!');
+    });
+  } else {
+    console.log('Sistema de Checklists carregado com sucesso!');
+  }
 </script>
 </body>
 </html>
