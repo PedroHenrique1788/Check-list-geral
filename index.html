@@ -299,68 +299,65 @@
         </div>
     </footer>
 
-    <script>
-       function navigateToChecklist(type) {
-            // Animação de clique
-            event.currentTarget.style.transform = 'scale(0.95)';
-            
-            setTimeout(() => {
-                event.currentTarget.style.transform = '';
-                
-                // Redirecionamento para as páginas
-                switch(type) {
-                    case 'payments':
-                        window.location.href = 'payments.html';
-                        break;
-                    case 'ongoing':
-                        window.location.href = 'ongoing.html';
-                        break;
-                    case 'ciq':
-                        alert('Este checklist ainda está em desenvolvimento!');
-                        break;
-                }
-            }, 150);
-        }
+   <script>
+  function navigateToChecklist(type, event) {
+    event.currentTarget.style.transform = 'scale(0.95)';
 
-        window.addEventListener('load', function() {
-            const cards = document.querySelectorAll('.card');
+    setTimeout(() => {
+      event.currentTarget.style.transform = '';
 
-            cards.forEach((card, index) => {
-                // Animação de entrada
-                setTimeout(() => {
-                    card.style.opacity = '0';
-                    card.style.transform = 'translateY(30px)';
-                    card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+      switch (type) {
+        case 'payments':
+          window.location.href = 'payments.html';
+          break;
+        case 'ongoing':
+          window.location.href = 'ongoing.html';
+          break;
+        case 'ciq':
+          alert('Este checklist ainda está em desenvolvimento!');
+          break;
+      }
+    }, 150);
+  }
 
-                    setTimeout(() => {
-                        card.style.opacity = '1';
-                        card.style.transform = 'translateY(0)';
-                    }, 100);
-                }, index * 200);
+  window.addEventListener('load', function () {
+    const cards = document.querySelectorAll('.card');
 
-                // Clique
-                if (card.classList.contains('available')) {
-                    card.addEventListener('click', function () {
-                        const type = card.getAttribute('data-checklist');
-                        navigateToChecklist(type);
-                    });
-                }
+    cards.forEach((card, index) => {
+      // Animação de entrada
+      setTimeout(() => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(30px)';
+        card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
 
-                // Hover
-                card.addEventListener('mouseenter', function () {
-                    if (card.classList.contains('available')) {
-                        card.style.transform = 'translateY(-8px)';
-                    }
-                });
+        setTimeout(() => {
+          card.style.opacity = '1';
+          card.style.transform = 'translateY(0)';
+        }, 100);
+      }, index * 200);
 
-                card.addEventListener('mouseleave', function () {
-                    if (card.classList.contains('available')) {
-                        card.style.transform = 'translateY(0)';
-                    }
-                });
-            });
+      // Clique funcional
+      if (card.classList.contains('available')) {
+        card.addEventListener('click', function (event) {
+          const type = card.getAttribute('data-checklist');
+          navigateToChecklist(type, event);
         });
+      }
 
-    </script>
+      // Hover
+      card.addEventListener('mouseenter', function () {
+        if (card.classList.contains('available')) {
+          card.style.transform = 'translateY(-8px)';
+        }
+      });
+
+      card.addEventListener('mouseleave', function () {
+        if (card.classList.contains('available')) {
+          card.style.transform = 'translateY(0)';
+        }
+      });
+    });
+  });
+</script>
 </body>
 </html>
