@@ -300,6 +300,13 @@
     </footer>
 
    <script>
+  // Configuração das URLs - SUBSTITUA PELAS SUAS URLs DO AZURE
+  const AZURE_URLS = {
+    payments: 'https://victorious-forest-03396211e.1.azurestaticapps.net/payments.html',
+    ongoing: 'https://victorious-forest-03396211e.1.azurestaticapps.net/ongoing.html',
+    ciq: 'https://victorious-forest-03396211e.1.azurestaticapps.net/ciq.html'
+  };
+
   function navigateToChecklist(type, event) {
     event.currentTarget.style.transform = 'scale(0.95)';
 
@@ -308,14 +315,20 @@
 
       switch (type) {
         case 'payments':
-          window.location.href = 'payments.html';
+          window.location.href = AZURE_URLS.payments;
           break;
         case 'ongoing':
-          window.location.href = 'ongoing.html';
+          window.location.href = AZURE_URLS.ongoing;
           break;
         case 'ciq':
-          alert('Este checklist ainda está em desenvolvimento!');
+          if (AZURE_URLS.ciq) {
+            window.location.href = AZURE_URLS.ciq;
+          } else {
+            alert('Este checklist ainda está em desenvolvimento!');
+          }
           break;
+        default:
+          console.error('Tipo de checklist não reconhecido:', type);
       }
     }, 150);
   }
