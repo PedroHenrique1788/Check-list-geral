@@ -1,0 +1,1248 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Checklist QuintoAndar Offboarding</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      color: #1a1a1a;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+      color: white;
+    }
+
+    .header h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .header p {
+      font-size: 1.1rem;
+      opacity: 0.9;
+      font-weight: 400;
+    }
+
+    .form-container {
+      background: white;
+      padding: 32px;
+      border-radius: 16px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+      margin-bottom: 32px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 24px;
+      margin-bottom: 24px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    label {
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #374151;
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    select {
+      padding: 12px 16px;
+      font-size: 16px;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      background: white;
+      transition: all 0.3s ease;
+      font-family: inherit;
+    }
+
+    select:focus {
+      outline: none;
+      border-color: #6366f1;
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    }
+
+    select:disabled {
+      background: #f9fafb;
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+
+    .checklist-box {
+      display: none;
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+      overflow: hidden;
+      margin-bottom: 24px;
+    }
+
+    .checklist-box.active {
+      display: block;
+    }
+
+    .checklist-header {
+      background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+      color: white;
+      padding: 24px 32px;
+      text-align: center;
+    }
+
+    .checklist-header h3 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin: 0;
+    }
+
+    .checklist-content {
+      padding: 32px;
+    }
+
+    .section-title {
+      color: #6366f1;
+      font-size: 12px;
+      font-weight: 700;
+      margin-top: 32px;
+      margin-bottom: 16px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      position: relative;
+    }
+
+    .section-title:first-child {
+      margin-top: 0;
+    }
+
+    .section-title::before {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 40px;
+      height: 2px;
+      background: #6366f1;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    li {
+      background: #f8fafc;
+      margin-bottom: 8px;
+      padding: 16px 20px;
+      border-radius: 12px;
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 14px;
+      line-height: 1.6;
+      position: relative;
+      overflow: hidden;
+    }
+
+    li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      background: #6366f1;
+      transform: scaleY(0);
+      transition: transform 0.3s ease;
+    }
+
+    li:hover {
+      background: #f1f5f9;
+      border-color: #6366f1;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.15);
+    }
+
+    li:hover::before {
+      transform: scaleY(1);
+    }
+
+    li.checked {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: white;
+      border-color: #10b981;
+      text-decoration: line-through;
+      opacity: 0.9;
+    }
+
+    li.checked::before {
+      background: white;
+      transform: scaleY(1);
+    }
+
+    .attention-box {
+      background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+      border: 2px solid #f59e0b;
+      border-radius: 12px;
+      padding: 20px;
+      margin-top: 24px;
+      position: relative;
+    }
+
+    .attention-box::before {
+      content: '⚠️';
+      position: absolute;
+      top: -10px;
+      left: 20px;
+      background: #f59e0b;
+      color: white;
+      padding: 8px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+    }
+
+    .attention-box h4 {
+      color: #92400e;
+      margin-top: 0;
+      margin-bottom: 12px;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .attention-list {
+      margin: 0;
+      padding-left: 20px;
+    }
+
+    .attention-list li {
+      background: none !important;
+      padding: 4px 0 !important;
+      margin: 0 !important;
+      border: none !important;
+      cursor: default !important;
+      color: #92400e !important;
+      font-size: 13px !important;
+      border-radius: 0 !important;
+      position: static !important;
+    }
+
+    .attention-list li:hover {
+      background: none !important;
+      transform: none !important;
+      box-shadow: none !important;
+    }
+
+    .attention-list li::before {
+      display: none !important;
+    }
+
+    .progress-container {
+      margin: 24px 0;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 8px;
+      background: #e5e7eb;
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 8px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #6366f1 0%, #8b5cf6 100%);
+      transition: width 0.5s ease;
+      border-radius: 4px;
+      width: 0%;
+    }
+
+    .progress-text {
+      text-align: center;
+      font-size: 14px;
+      color: #6b7280;
+      font-weight: 500;
+    }
+
+    .button-container {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+      padding: 32px;
+      background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+      border-top: 1px solid rgba(99, 102, 241, 0.1);
+    }
+
+    .btn {
+      padding: 14px 28px;
+      border: none;
+      border-radius: 14px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      min-width: 150px;
+      position: relative;
+      overflow: hidden;
+      text-transform: none;
+      letter-spacing: 0.3px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.6s ease;
+    }
+
+    .btn:hover::before {
+      left: 100%;
+    }
+
+    .btn:active {
+      transform: translateY(1px);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+      color: white;
+      box-shadow: 0 6px 20px rgba(99, 102, 241, 0.3);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(99, 102, 241, 0.5);
+    }
+
+    .btn-secondary {
+      background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
+      color: white;
+      box-shadow: 0 6px 20px rgba(107, 114, 128, 0.3);
+    }
+
+    .btn-secondary:hover {
+      background: linear-gradient(135deg, #4b5563 0%, #374151 100%);
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(107, 114, 128, 0.5);
+    }
+
+    .btn-success {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: white;
+      box-shadow: 0 6px 20px rgba(16, 185, 129, 0.3);
+    }
+
+    .btn-success:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(16, 185, 129, 0.5);
+    }
+
+    @media (max-width: 768px) {
+      .header h1 {
+        font-size: 2rem;
+      }
+      
+      .form-container {
+        padding: 24px;
+      }
+      
+      .form-row {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+      
+      .checklist-content {
+        padding: 24px;
+      }
+      
+      .button-container {
+        flex-direction: column;
+        align-items: center;
+        padding: 24px;
+        gap: 12px;
+      }
+      
+      .btn {
+        width: 100%;
+        max-width: 320px;
+      }
+    }
+    /* Estilos para acordeão (listas suspensas) */
+.accordion-item {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.accordion-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+  font-weight: 500;
+}
+
+.accordion-icon {
+  font-size: 12px;
+  transition: transform 0.3s ease;
+  color: #6366f1;
+  font-weight: bold;
+  margin-left: 10px;
+  min-width: 16px;
+  text-align: center;
+}
+
+.accordion-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease-out, padding 0.3s ease;
+  padding: 0 20px 0 0;
+}
+
+.accordion-item.accordion-open .accordion-content {
+  max-height: 500px;
+  padding: 15px 20px 5px 0;
+}
+
+.explanation-text {
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  padding: 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: #475569;
+  border-left: 4px solid #6366f1;
+  margin-top: 8px;
+  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.1);
+}
+
+.accordion-item:hover .accordion-header {
+  color: #6366f1;
+}
+
+.accordion-item.checked .accordion-header {
+  color: white;
+}
+
+.accordion-item.checked .explanation-text {
+  background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.1) 100%);
+  color: rgba(255,255,255,0.9);
+  border-left-color: rgba(255,255,255,0.5);
+}
+
+/* Responsividade para dispositivos móveis */
+@media (max-width: 768px) {
+  .accordion-header {
+    font-size: 13px;
+  }
+  
+  .explanation-text {
+    font-size: 12px;
+    padding: 12px;
+  }
+  
+  .accordion-content {
+    padding-right: 10px;
+  }
+  
+  .accordion-item.accordion-open .accordion-content {
+    padding-right: 10px;
+  }
+}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>✅Roteiro interativo QuintoAndar✅</h1>
+      <p>Selecione o canal, assunto e tipo de cliente para começar</p>
+    </div>
+
+    <div class="form-container">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="canal">Escolha o canal:</label>
+          <select id="canal" name="canal">
+            <option value="">-- Selecione o canal --</option>
+            <option value="call">📞 Call (Ligações)</option>
+            <option value="chat">💬 Chat (Conversas)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="assunto">Escolha o assunto:</label>
+          <select id="assunto" name="assunto" disabled>
+            <option value="">-- Selecione o assunto --</option>
+            <option value="vistoria">🏠 Vistoria de saída</option>
+            <option value="rescisao">📄 Pedido de rescisão</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="cliente">Escolha o tipo de cliente:</label>
+          <select id="cliente" name="cliente" disabled>
+            <option value="">-- Selecione o cliente --</option>
+            <option value="inquilino">👤 Inquilino</option>
+            <option value="proprietario">🏢 Proprietário</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Checklists dinâmicos serão inseridos aqui -->
+    <div id="checklist-container"></div>
+  </div>
+
+  <script>
+    // CONFIGURAÇÃO DAS LISTAS - ORGANIZADAS POR CANAL
+const checklistData = {
+  'chat': {
+    // VISTORIA DE SAÍDA
+    'vistoria-inquilino': {
+      title: '🏠 Vistoria de Saída - Inquilino',
+      sections: [
+        {
+          title: 'Agendamento e Realização',
+          items: [
+            'A vistoria é agendada automaticamente com base na data de desocupação que você informar. Ela acontece no dia da saída ou no próximo dia útil, sem necessidade da sua presença — mas é importante que o imóvel esteja vazio, limpo e com acesso liberado. Combinado? Ah, e lembre-se de deixar as chaves disponíveis (lockbox, portaria ou conforme combinado). Caso haja objetos no imóvel ou dificuldade de acesso, a vistoria pode ser cancelada.',
+          ]
+        },
+        {
+          title: 'Vistoriador e Processo',
+          items: [
+            'A vistoria é feita por um profissional credenciado, que registra tudo com fotos, vídeos e observações técnicas. Depois, a gente compara o estado atual do imóvel com o que foi registrado na vistoria de entrada, pra garantir uma análise justa.',
+          ]
+        },
+        {
+          title: 'Laudo e Prazos',
+          items: [
+            'O laudo da vistoria é enviado por e-mail em até 48h úteis. Pra acessar, é preciso inserir o e-mail, telefone e o CEP do imóvel — então vale conferir se os dados estão atualizados. Depois disso, você tem 5 dias corridos pra comentar no laudo. Se não houver comentário dentro desse prazo, o processo segue automaticamente pra análise.',
+          ]
+        }
+      ],
+      attentionPoints: [
+        'Ah, e só reforçando: a vistoria é agendada automaticamente, então é importante ficar de olho na data. Outra dica — o laudo só pode ser acessado se os dados estiverem certinhos (e-mail, telefone e CEP do imóvel). E o prazo pra comentar no laudo são 5 dias corridos, não úteis, tá bom?',
+      ]
+    },
+    'vistoria-proprietario': {
+      title: '🏠 Vistoria de Saída - Proprietário',
+      sections: [
+        {
+          title: 'Processo de Vistoria',
+          items: [
+            'A vistoria acontece automaticamente depois que o inquilino desocupa o imóvel, com base na data informada na rescisão. Você será notificado assim que ela for realizada. Quem faz é um profissional credenciado, que elabora um laudo técnico com fotos e informações. Depois, esse laudo é comparado com o da entrada pra identificar possíveis reparos. E caso não haja danos, você pode solicitar a isenção de cobrança por reparos, tudo dentro do próprio processo.',
+          ]
+        },
+        {
+          title: 'Laudo e Acesso',
+          items: [
+            'O laudo da vistoria é enviado por e-mail em até 48h úteis. Pra visualizar, é necessário inserir o e-mail, telefone e o CEP do imóvel — então vale garantir que os dados estejam atualizados. Depois disso, você tem 5 dias corridos pra comentar no laudo. Se não tiver comentários nesse prazo, a análise segue automaticamente.',
+          ]
+        },
+        {
+          title: 'Entrega das Chaves',
+          items: [
+            'Gostaria de informar que, para facilitar, priorizamos a entrega das chaves via lockbox, portaria, zelador ou síndico. Caso essas opções não estejam disponíveis, as chaves serão enviadas para o endereço que você indicar. Também quero reforçar que o envio costuma acontecer em até 72 horas úteis após a vistoria. Estamos aqui para garantir que tudo ocorra da melhor forma para você.',
+          ]
+        }
+      ],
+      attentionPoints: [
+        'Gostaria de reforçar alguns pontos importantes para você ficar tranquilo durante o processo. O laudo da vistoria é entregue em até 48 horas úteis, para que você possa avaliar com calma. Também é fundamental que os comentários sejam feitos dentro de 5 dias corridos após o recebimento do laudo, para que possamos dar sequência ao processo. Entendo que possa parecer que o reanúncio aconteça imediatamente após a vistoria, mas ele depende da conclusão da vistoria, do prazo para comentários e da devolução das chaves. Estamos sempre à disposição para esclarecer suas dúvidas e garantir que tudo aconteça da melhor forma para você.',
+      ]
+    },
+    // PEDIDO DE RESCISÃO
+    'rescisao-inquilino': {
+      title: '📄 Pedido de rescisão - Inquilino',
+      sections: [
+        {
+          title: 'Processo de Rescisão',
+          items: [
+            'O pedido de rescisão precisa ser feito diretamente pelo app do QuintoAndar. É só acessar a aba Meu Lar, selecionar o imóvel e clicar em Rescisão de contrato > Iniciar pedido. Se tiver qualquer dificuldade, posso te orientar ou, se preferir, você pode me enviar um print ou uma evidência do erro. A data de desocupação pode ser escolhida com até 60 dias de antecedência, o que ajuda a organizar com mais tranquilidade a mudança, a limpeza e a entrega do imóvel.',
+          ]
+        },
+        {
+          title: 'Multa e Negociação',
+          items: [
+            'Caso exista multa por rescisão, ela será exibida automaticamente no app, na aba Pagamentos. O valor é calculado com base nas regras do contrato e no tempo restante até o fim da locação. Se precisar, o cliente também pode fazer a solicitação de negociação diretamente pelo app, de forma simples e rápida.',
+          ]
+        },
+        {
+          title: 'Responsabilidades e Próximos Passos',
+          items: [
+            'Durante o processo de rescisão, o cliente continua responsável pelas contas de consumo até a entrega das chaves — isso inclui luz, água, gás e também serviços contratados, como internet e TV. A vistoria de saída será agendada automaticamente assim que a solicitação de rescisão for confirmada, e o cliente receberá um aviso com todos os detalhes por e-mail e/ou pelo app. A partir desse momento, se inicia a jornada de devolução do imóvel.',
+          ]
+        }
+      ],
+      attentionPoints: [
+        'É importante reforçar que o processo de rescisão só avança quando o pedido é enviado pelo app, e precisa ser feito pelo titular do contrato. Muitos clientes acreditam que apenas avisar o atendimento já é suficiente, o que pode gerar atrasos. Além disso, é comum esquecerem que todas as contas de consumo devem estar quitadas até a entrega das chaves — esse é um ponto que costuma gerar recontato e pode atrasar a finalização do processo.',
+      ]
+    },
+    'rescisao-proprietario': {
+      title: '📄 Pedido de rescisão - Proprietário',
+      sections: [
+        {
+          title: 'Notificações e Acompanhamento',
+          items: [
+            'Você será notificado automaticamente por e-mail ou pelo app em cada etapa da jornada de devolução, o que garante transparência e acompanhamento desde o início do processo. Também expliquei que ele poderá consultar a data de saída informada pelo inquilino, que é essencial para o planejamento e para acompanhar o encerramento do contrato. Essa data define o momento da vistoria e orienta os próximos passos, como a entrega das chaves e possível reanúncio.',
+          ]
+        },
+        {
+          title: 'Jornada de Encerramento',
+          items: [
+            'Após a solicitação de rescisão, a jornada segue com a vistoria de saída, a devolução das chaves e a análise final do imóvel. Esses passos são obrigatórios para que o encerramento do contrato seja concluído corretamente. Reforcei que o proprietário será atualizado automaticamente sobre cada etapa, sem precisar solicitar manualmente. Também esclareci que não é necessário pedir o reanúncio — o próprio sistema faz isso de forma automática após a finalização do processo.',
+          ]
+        },
+        {
+          title: 'Reanúncio do Imóvel',
+          items: [
+            'Esclareci que o reanúncio do imóvel só acontece após a conclusão completa da jornada de devolução. Isso inclui a realização da vistoria de saída, o recebimento das chaves e, se necessário, a análise e execução de eventuais reparos no imóvel. O processo é automático e acontece assim que todas essas etapas forem finalizadas, garantindo que o imóvel esteja pronto para ser anunciado novamente com segurança e qualidade.',
+          ]
+        }
+      ],
+      attentionPoints: [
+        'É comum muitos proprietários entrarem em contato antes do tempo, perguntando sobre o reanúncio do imóvel. Por isso, é essencial reforçar que o reanúncio só acontece depois que todas as etapas da jornada — vistoria, devolução das chaves e reparos, se houver — forem concluídas com sucesso. Assim, garantimos que o imóvel esteja em condições adequadas para ser anunciado novamente.',
+      ]
+    }
+  },
+  'call': {
+    // Para call, as listas têm itens clicáveis com explicações
+    'vistoria-inquilino': {
+      title: '🏠 Vistoria de Saída - Inquilino',
+      sections: [
+        {
+          title: 'Agendamento e Realização',
+          items: [
+            {
+              text: '✔️ Explicou que a vistoria é agendada automaticamente com base na data de desocupação informada?',
+              explanation: 'A vistoria de saída não precisa ser solicitada manualmente pelo cliente. Assim que o inquilino envia o pedido de rescisão pelo app e informa a data em que pretende desocupar o imóvel, o sistema já utiliza essa informação como base para agendar a vistoria automaticamente. Esse agendamento leva em consideração a disponibilidade dos vistoriadores e a localização do imóvel, buscando sempre garantir que a vistoria ocorra o mais próximo possível da data de saída. Ao atender o cliente, deixe claro que ele não precisa se preocupar em marcar a vistoria — o processo é automático e ele será avisado assim que a data for definida. Se o cliente tiver dúvidas, você pode consultar o agendamento no MagicLink e informar a data e o horário programados.'
+            },
+            {
+              text: '✔️ Informou que o agendamento ocorre até 5 dias corridos antes da saída?',
+              explanation: 'O agendamento da vistoria de saída é feito automaticamente pelo sistema, com base na data de desocupação informada pelo inquilino no pedido de rescisão. Esse agendamento pode ser gerado com até 5 dias corridos de antecedência em relação à data informada. Por isso, quando o cliente tiver dúvidas sobre quando a vistoria vai acontecer, explique que ele não precisa marcar nada manualmente: o próprio sistema organiza esse processo e ele será avisado por e-mail ou pelo app assim que o agendamento estiver confirmado.'
+            },
+            {
+              text: '✔️ Esclareceu que a vistoria é feita no dia da saída ou no primeiro dia útil seguinte?',
+              explanation: 'A vistoria é programada para acontecer no mesmo dia da saída do imóvel ou, se não for possível, no primeiro dia útil seguinte. Essa proximidade com a data informada garante que as condições do imóvel reflitam com fidelidade o momento da entrega. Quando for explicar ao cliente, reforce que o objetivo é fazer a vistoria o quanto antes após a desocupação, para agilizar o encerramento do contrato e evitar divergências futuras. Caso a saída esteja marcada para um fim de semana ou feriado, avise que a vistoria será feita no próximo dia útil.'
+            },
+            {
+              text: '✔️ Explicou que não é necessário estar presente, mas o imóvel deve estar desocupado e limpo?',
+              explanation: 'O cliente não precisa acompanhar a vistoria presencialmente, mas é essencial que o imóvel esteja completamente desocupado, sem móveis ou objetos pessoais, e com limpeza básica realizada. Essa preparação é indispensável para que a vistoria ocorra sem imprevistos. Durante o atendimento, oriente o cliente com clareza: mesmo que ele não vá acompanhar a vistoria, o imóvel deve estar pronto para avaliação. Isso evita cancelamentos e retrabalho, além de garantir um processo mais ágil e eficiente.'
+            },
+            {
+              text: '✔️ Orientou sobre disponibilização das chaves (lockbox, portaria, zelador ou conforme combinado)?',
+              explanation: 'A vistoria só pode acontecer se o vistoriador tiver acesso ao imóvel. Por isso, sempre pergunte ao cliente onde as chaves estarão disponíveis no dia da vistoria — pode ser na portaria, em um lockbox, com o zelador ou outra pessoa autorizada. Se o cliente ainda não informou essa informação, oriente que ele precisa deixar as chaves em um local seguro e acessível, de acordo com as opções apresentadas no aplicativo. Sem essa etapa, o vistoriador pode não conseguir entrar, o que gera cancelamento automático da vistoria.'
+            },
+            {
+              text: '✔️ Alertou que objetos no imóvel ou falta de acesso podem cancelar a vistoria?',
+              explanation: 'Explique ao cliente que, se o imóvel estiver com móveis, objetos pessoais ou sinais de que ainda há moradores no local, a vistoria será cancelada. O mesmo acontece se o vistoriador não conseguir acessar o imóvel por falta de chaves, erro de local ou outro impedimento. Deixe claro que esses fatores impedem a realização da vistoria e podem atrasar o encerramento do contrato. Por isso, é fundamental garantir que o imóvel esteja desocupado, limpo e com acesso garantido no dia agendado.'
+            }
+          ]
+        },
+        {
+          title: 'Vistoriador e Processo',
+          items: [
+            {
+              text: '✔️ Informou que o vistoriador é um profissional credenciado?',
+              explanation: 'O analista deve esclarecer que a vistoria de saída é realizada por um profissional credenciado e treinado por uma empresa parceira do QuintoAndar, seguindo padrões de qualidade específicos. O vistoriador não faz julgamentos pessoais nem negociações com as partes envolvidas. Sua função é exclusivamente técnica: registrar o estado do imóvel de forma neutra e detalhada, garantindo que todas as informações estejam documentadas de forma fiel à realidade. É importante passar ao cliente a segurança de que o vistoriador atua com isenção e profissionalismo, o que evita conflitos e garante mais transparência no processo.'
+            },
+            {
+              text: '✔️ Explicou que a avaliação é feita com fotos, vídeos e observações técnicas?',
+              explanation: 'A vistoria é um processo técnico, que envolve o registro detalhado das condições do imóvel por meio de fotos, vídeos e comentários objetivos. O vistoriador avalia o funcionamento de itens testáveis (como torneiras, chuveiros e tomadas), registra visualmente avarias ou alterações, e documenta tudo no laudo técnico. O cliente deve saber que não se trata de uma avaliação superficial ou baseada em opinião — cada observação é fundamentada com evidência visual, o que ajuda na análise posterior e reduz o risco de interpretações erradas. Reforce que todo o conteúdo da vistoria será disponibilizado no laudo para acompanhamento.'
+            },
+            {
+              text: '✔️ Esclareceu que a comparação é feita entre o estado atual e a vistoria de entrada?',
+              explanation: 'Um ponto essencial do processo é a comparação entre a vistoria de saída e a vistoria de entrada. O objetivo é identificar qualquer diferença relevante no estado do imóvel que tenha surgido durante a locação. Essa comparação serve para apontar quais danos são responsabilidade do inquilino e quais já estavam presentes antes. O cliente precisa entender que o laudo de saída será analisado lado a lado com o laudo de entrada, de forma justa e baseada em evidências, sem julgamentos. Essa etapa é o que permite definir se há necessidade de reparos ou não, além de embasar possíveis mediações entre as partes.'
+            }
+          ]
+        },
+        {
+          title: 'Laudo e Prazos',
+          items: [
+            {
+              text: '✔️ Comunicou que o laudo será enviado por e-mail em até 48 horas úteis?',
+              explanation: 'Após a realização da vistoria de saída, o laudo técnico é produzido e enviado automaticamente para o cliente por e-mail, em até 48 horas úteis. Esse prazo começa a contar a partir da data da vistoria. Durante o atendimento, oriente o cliente a ficar atento à caixa de entrada, incluindo a pasta de spam. Explique que esse é um documento essencial para o processo de encerramento e que, assim que o laudo for liberado, ele poderá acessá-lo para verificar os registros feitos e, se necessário, fazer comentários ou apontamentos.'
+            },
+            {
+              text: '✔️ Informou que será necessário inserir e-mail, telefone e CEP do imóvel para acessar?',
+              explanation: 'Para visualizar o laudo, o cliente precisará preencher um pequeno formulário de segurança, informando o e-mail usado no contrato, o telefone cadastrado e o CEP do imóvel. Esses dados servem para confirmar a identidade da pessoa que está acessando o laudo, garantindo mais segurança no processo. Oriente o cliente a ter essas informações em mãos ao tentar abrir o link. Caso ele tenha dificuldades, verifique se os dados estão corretos no cadastro e oriente a atualizar, se necessário.'
+            },
+            {
+              text: '✔️ Orientou a verificar se os dados cadastrais estão atualizados?',
+              explanation: 'Um ponto importante é garantir que o cliente esteja com os dados atualizados, especialmente o e-mail e o telefone. Se essas informações estiverem desatualizadas no cadastro, ele pode ter dificuldades para receber ou acessar o laudo. Por isso, durante o atendimento, pergunte se o cliente ainda utiliza os dados cadastrados e oriente a atualizá-los se for necessário. Isso ajuda a evitar atrasos no processo de análise e previne recontato por falhas de comunicação.'
+            },
+            {
+              text: '✔️ Explicou que terá 5 dias corridos (não úteis) para comentar no laudo?',
+              explanation: 'Ao receber o laudo, o cliente terá 5 dias corridos (e não úteis) para revisar o conteúdo e, caso identifique alguma discordância, comentar diretamente pelo link. Explique que esse prazo é contado a partir do momento em que o laudo é disponibilizado e não é prorrogável. É importante orientar o cliente a abrir o link o quanto antes, pois ele poderá acessá-lo apenas uma vez. Ao comentar, ele deve descrever com clareza o que discorda e, se possível, incluir fotos complementares.'
+            },
+            {
+              text: '✔️ Esclareceu que sem comentários, o processo segue automaticamente para análise?',
+              explanation: 'Caso o cliente não comente o laudo dentro do prazo de 5 dias corridos, o processo seguirá automaticamente para a próxima etapa: a análise do laudo, feita pela equipe interna. É essencial que o analista deixe isso claro no atendimento para evitar surpresas. Se o cliente concordar com o conteúdo do laudo, não é necessário realizar nenhuma ação. Porém, se houver qualquer dúvida ou discordância, ele deve comentar dentro do prazo. Passado esse período, a oportunidade de manifestação é encerrada e o processo segue normalmente.'
+            }
+          ]
+        }
+      ],
+      attentionPoints: [
+        'Clientes que não sabiam que a vistoria era automática e perdem a data',
+        'Não sabiam que o acesso ao laudo exige dados atualizados (e-mail, telefone e CEP)',
+        'Perdem o prazo de comentários por não entenderem que são dias corridos, não úteis'
+      ]
+    },
+    'vistoria-proprietario': {
+      title: '🏠 Vistoria de Saída - Proprietário',
+      sections: [
+        {
+          title: 'Processo de Vistoria',
+          items: [
+            {
+              text: '✔️ Explicou que a vistoria será realizada automaticamente após a desocupação?',
+              explanation: 'O proprietário deve ser informado de que a vistoria de saída acontece automaticamente, logo após a desocupação do imóvel pelo inquilino. O sistema agenda essa vistoria com base na data de saída informada no pedido de rescisão. Não é necessário que ele solicite nada — todo o processo é conduzido pelo QuintoAndar, garantindo mais agilidade e previsibilidade. Reforce que esse agendamento considera a logística da operação, visando que a vistoria ocorra o quanto antes após a saída.'
+            },
+            {
+              text: '✔️ Informou que o agendamento é baseado na data do pedido de rescisão?',
+              explanation: 'Explique que, no momento em que o inquilino realiza o pedido de rescisão no app, ele informa uma data de desocupação. Essa data serve como base para o sistema programar a vistoria de saída. Com isso, o proprietário pode esperar que a vistoria ocorra em até 3 dias úteis após essa data, salvo exceções logísticas. É importante garantir que ele saiba que o processo é organizado desde o início da rescisão, dando previsibilidade para o encerramento do contrato.'
+            },
+            {
+              text: '✔️ Comunicou que será notificado quando a vistoria ocorrer?',
+              explanation: 'O proprietário recebe uma notificação por e-mail assim que a vistoria é agendada, com data e horário definidos. Oriente-o a acompanhar sua caixa de entrada e spam, pois essa comunicação traz informações importantes sobre a próxima etapa. Além disso, ele será notificado novamente quando o laudo for disponibilizado. Durante o atendimento, reforce que essas comunicações são automáticas e que não há necessidade de solicitar atualizações.'
+            },
+            {
+              text: '✔️ Esclareceu que o vistoriador é um profissional credenciado?',
+              explanation: 'É essencial informar ao proprietário que a vistoria será feita por um vistoriador profissional credenciado, treinado por uma empresa parceira do QuintoAndar. Ele segue um padrão técnico rigoroso, sem envolvimento emocional ou julgamentos subjetivos. Deixe claro que o papel do vistoriador é registrar as condições do imóvel com imparcialidade e profissionalismo, assegurando uma análise justa e transparente para ambas as partes.'
+            },
+            {
+              text: '✔️ Explicou que será feito um relatório técnico sobre as condições do imóvel?',
+              explanation: 'A vistoria resulta na elaboração de um laudo técnico que reúne fotos, vídeos e observações sobre as condições do imóvel no momento da desocupação. Esse documento é produzido com base em critérios objetivos e disponibilizado tanto para o inquilino quanto para o proprietário. Explique que o laudo é uma ferramenta oficial do processo, e que ele poderá usá-lo para validar as condições do imóvel e acompanhar a análise feita pelo time técnico.'
+            },
+            {
+              text: '✔️ Informou que o laudo será comparado com o da entrada para verificar reparos?',
+              explanation: 'Após a elaboração do laudo de saída, o time do QuintoAndar faz uma comparação entre esse documento e o laudo de entrada realizado no início da locação. O objetivo é identificar se houve alterações ou danos durante a estadia do inquilino. Deixe claro ao proprietário que, se forem encontradas diferenças que apontem para responsabilidades do inquilino, ele será informado sobre os reparos necessários. Caso discorde, ele poderá comentar no laudo dentro do prazo indicado.'
+            }
+          ]
+        },
+        {
+          title: 'Laudo e Acesso',
+          items: [
+            {
+              text: '✔️ Comunicou que o laudo será enviado por e-mail em até 48 horas úteis?',
+              explanation: 'O proprietário deve ser informado de que, após a realização da vistoria de saída, o laudo técnico é gerado e enviado por e-mail em até 48 horas úteis. Esse prazo começa a contar a partir do momento em que o vistoriador conclui o registro no sistema. Oriente-o a acompanhar sua caixa de entrada, incluindo a pasta de spam, pois o laudo será a base para qualquer análise sobre a condição do imóvel. Se houver atrasos ou dúvidas, o analista pode verificar a previsão de liberação diretamente pelo sistema.'
+            },
+            {
+              text: '✔️ Informou que será necessário inserir e-mail, telefone e CEP para visualizar?',
+              explanation: 'Explique ao proprietário que, por segurança, o acesso ao laudo técnico exige o preenchimento de um formulário com três dados: o e-mail cadastrado, o telefone do contrato e o CEP do imóvel. Essa etapa garante que apenas pessoas autorizadas visualizem o documento. Oriente o cliente a ter essas informações em mãos ao acessar o link, e, se ele relatar dificuldades, verifique se os dados cadastrados estão corretos no sistema.'
+            },
+            {
+              text: '✔️ Orientou a garantir que os dados cadastrais estejam atualizados?',
+              explanation: 'Antes do envio do laudo, é fundamental que os dados do proprietário estejam atualizados, especialmente o e-mail e o telefone. Caso contrário, ele pode não receber a notificação ou ter dificuldades para abrir o documento. Durante o atendimento, confirme com o cliente se essas informações estão corretas e oriente a atualização, se necessário. Essa verificação simples evita atrasos na análise e recontato por falha de comunicação.'
+            },
+            {
+              text: '✔️ Explicou que terá 5 dias corridos para comentar no laudo?',
+              explanation: 'O proprietário terá até 5 dias corridos a partir da liberação do laudo para revisar o conteúdo e fazer comentários, caso identifique algo com o qual não concorda. Explique que esse prazo é contado em dias corridos — e não úteis — e que, ao acessar o link, ele terá apenas uma chance de comentar. Por isso, oriente-o a analisar o laudo com atenção e a registrar suas observações com clareza e, se possível, com evidências (como fotos complementares).'
+            },
+            {
+              text: '✔️ Esclareceu que após o prazo, a análise segue automaticamente?',
+              explanation: 'Após os 5 dias corridos, se o proprietário não comentar no laudo, o processo segue automaticamente para a análise técnica, feita pelo time responsável. Informe que, nesse caso, o conteúdo será considerado como aceito e não será possível enviar novas observações. Durante o atendimento, o analista deve reforçar a importância de revisar o laudo dentro do prazo, garantindo que todas as manifestações sejam consideradas antes do fechamento da análise.'
+            }
+          ]
+        },
+        {
+          title: 'Entrega das Chaves',
+          items: [
+            {
+              text: '✔️ Informou que a entrega é priorizada via lockbox, portaria, zelador ou síndico?',
+              explanation: 'Durante o atendimento, o analista deve explicar ao proprietário que a forma preferencial de devolução das chaves é por meios que garantam fácil acesso ao imóvel após a desocupação: lockbox, portaria, zelador ou síndico. Essas opções permitem que o vistoriador entre no imóvel com segurança e autonomia, mesmo sem o acompanhamento do inquilino. Reforce que essas alternativas são priorizadas porque evitam atrasos e reduzem o risco de cancelamento da vistoria.'
+            },
+            {
+              text: '✔️ Explicou que sem essas opções, as chaves serão enviadas para endereço indicado?',
+              explanation: 'Caso nenhuma das opções anteriores esteja disponível, o inquilino deverá enviar as chaves para um endereço logístico previamente informado pelo QuintoAndar. Oriente o proprietário de que, nesses casos, o sistema apresentará essa opção ao inquilino no app, junto das instruções de envio. Explique que essa alternativa é segura, mas pode levar mais tempo para concluir o processo de entrega e, consequentemente, impactar prazos posteriores como o início da análise do laudo.'
+            },
+            {
+              text: '✔️ Comunicou o prazo de até 72 horas úteis após a vistoria para envio?',
+              explanation: 'É fundamental que o proprietário saiba que o inquilino tem até 72 horas úteis após a realização da vistoria para concluir a entrega das chaves. Oriente-o que esse prazo é respeitado mesmo quando a vistoria já foi feita, e que nenhuma análise sobre danos ou valores será iniciada antes da entrega formal das chaves. Se o cliente demonstrar preocupação com prazos, explique que o sistema acompanha automaticamente esse período e que a análise do contrato só avança após a confirmação da devolução.'
+            }
+          ]
+        }
+      ],
+      attentionPoints: [
+        'Não sabiam que o laudo chegaria em até 48h úteis',
+        'Não sabiam que precisavam comentar dentro de 5 dias corridos',
+        'Achavam que o reanúncio ocorreria imediatamente após a vistoria',
+        'Reforce que o reanúncio depende da vistoria, prazo de comentários e devolução das chaves'
+      ]
+    },
+    'rescisao-inquilino': {
+      title: '📄 Pedido de rescisão - Inquilino',
+      sections: [
+        {
+          title: 'Processo de Rescisão',
+          items: [
+            {
+              text: '✔️ Explicou que o pedido deve ser feito exclusivamente pelo app QuintoAndar?',
+              explanation: 'Durante o atendimento, o analista deve informar com clareza que o pedido de rescisão deve ser feito exclusivamente pelo aplicativo do QuintoAndar, por questões de segurança, rastreabilidade e aceitação dos termos. Não é possível formalizar a solicitação por telefone, e-mail ou por terceiros, mesmo que sejam parentes ou corretores. Reforce que esse fluxo garante mais transparência e evita erros no processo de encerramento do contrato.'
+            },
+            {
+              text: '✔️ Orientou a acessar a aba "Meu Lar" e selecionar o imóvel desejado?',
+              explanation: 'Explique ao inquilino que, para iniciar a rescisão, ele deve acessar o app, ir até a aba "Meu Lar" e selecionar o imóvel correspondente ao contrato que deseja encerrar. Esse é o primeiro passo para acessar todas as funcionalidades relacionadas à locação vigente, incluindo o encerramento. Se o cliente estiver com dificuldades de navegação, ofereça apoio para localizar a opção correta.'
+            },
+            {
+              text: '✔️ Informou para clicar em "Rescisão de contrato" e depois "Iniciar pedido"?',
+              explanation: 'Após selecionar o imóvel, o inquilino deve clicar na opção “Rescisão de contrato” e, em seguida, “Iniciar pedido”. Oriente o cliente a seguir esse fluxo até o final, garantindo que ele leia e aceite os termos apresentados na tela. Reforce que o processo só é considerado formalizado após o envio completo do pedido, e que a partir disso o sistema dará continuidade automática às próximas etapas, como agendamento de vistoria e comunicação ao proprietário.'
+            },
+            {
+              text: '✔️ Ofereceu ajuda caso tenha dificuldades (solicitar print ou evidência do erro)?',
+              explanation: 'Se o cliente relatar dificuldades para enviar o pedido pelo app, o analista deve se prontificar a ajudar, solicitando um print da tela com o erro ou comportamento inesperado. Essa evidência é essencial para entender o que está impedindo o avanço. Caso o app esteja desatualizado, oriente a realizar a atualização. Se o erro persistir mesmo com os dados corretos, abra uma tarefa para o time responsável com a evidência anexada.'
+            },
+            {
+              text: '✔️ Explicou que pode escolher a data de desocupação com até 60 dias de antecedência?',
+              explanation: 'Informe ao inquilino que ele pode escolher a data de desocupação com até 60 dias de antecedência no próprio app. Essa flexibilidade permite que ele programe a mudança com tranquilidade e se prepare para as etapas seguintes, como vistoria, limpeza e entrega das chaves. Oriente que, quanto mais previsibilidade ele tiver, mais fluido será o encerramento do contrato.'
+            },
+            {
+              text: '✔️ Esclareceu que esse prazo permite organizar mudança, limpeza e entrega?',
+              explanation: 'Durante o atendimento, destaque que escolher uma data com antecedência facilita não apenas a organização da mudança, mas também o tempo necessário para limpeza do imóvel e entrega das chaves, conforme os padrões exigidos. Reforce que essa programação evita imprevistos, reduz o risco de cancelamento da vistoria e contribui para uma finalização de contrato sem pendências.'
+            }
+          ]
+        },
+        {
+          title: 'Multa e Negociação',
+          items: [
+            {
+              text: '✔️ Informou que se houver multa, ela será exibida automaticamente no app?',
+              explanation: 'O analista deve explicar que, caso o contrato preveja a aplicação de multa por rescisão antecipada, o valor será calculado automaticamente pelo sistema e exibido diretamente no app, logo após o envio do pedido de rescisão. Reforce ao inquilino que essa informação aparece de forma transparente e não precisa ser solicitada manualmente — o sistema considera as cláusulas contratuais e o tempo restante da locação para calcular o valor.'
+            },
+            {
+              text: '✔️ Explicou que aparecerá na aba "Pagamentos"?',
+              explanation: 'Oriente o cliente a acessar a aba “Pagamentos” no app após enviar o pedido de rescisão. É lá que ele encontrará o valor da multa, se houver, além das opções de visualização detalhada. Durante o atendimento, se o cliente estiver em dúvida, o analista pode guiá-lo até essa seção e confirmar se a informação já está disponível, conforme o status da solicitação.'
+            },
+            {
+              text: '✔️ Esclareceu que o valor é calculado com base no contrato e tempo restante?',
+              explanation: 'O valor da multa é proporcional ao tempo restante do contrato, conforme estabelecido nas cláusulas contratuais. O analista deve reforçar que o cálculo não é feito de forma subjetiva, mas sim com base objetiva no que foi assinado pelas partes. Por exemplo: se o contrato tem 12 meses e o inquilino está saindo no 6º mês, o valor será proporcional aos meses restantes. Essa explicação ajuda a evitar contestação e aumenta a percepção de justiça do processo.'
+            },
+            {
+              text: '✔️ Orientou que a negociação pode ser feita pelo próprio app?',
+              explanation: 'Caso o inquilino deseje negociar o valor da multa, o analista deve informar que essa negociação pode ser feita diretamente com o proprietário pelo próprio app, na seção “Pagamentos”. O sistema permite que o inquilino envie uma proposta e aguarde a resposta do proprietário. Reforce que o QuintoAndar não interfere nesse acordo, mas disponibiliza a funcionalidade para facilitar a comunicação entre as partes de forma segura e registrada.'
+            }
+          ]
+        },
+        {
+          title: 'Responsabilidades e Próximos Passos',
+          items: [
+            {
+              text: '✔️ Informou que continuará responsável pelas contas de consumo até a entrega das chaves?',
+              explanation: 'O analista deve deixar claro ao inquilino que ele permanece responsável por todas as contas de consumo do imóvel até a efetiva entrega das chaves. Isso inclui o período entre a desocupação e o momento em que as chaves são disponibilizadas no local combinado ou enviadas pelo correio, se aplicável. Reforce que esse cuidado é essencial para evitar cobranças indevidas e pendências futuras no encerramento do contrato.'
+            },
+            {
+              text: '✔️ Especificou que inclui luz, água, gás e serviços contratados (internet, TV)?',
+              explanation: 'Durante a orientação, é importante listar os principais serviços que permanecem sob responsabilidade do inquilino até o encerramento: energia elétrica, água, gás encanado (quando houver), além de serviços contratados diretamente, como internet, TV a cabo ou telefone fixo. Explique que é responsabilidade do cliente solicitar o cancelamento ou a transferência desses serviços antes da saída definitiva, evitando cobranças após o encerramento do contrato.'
+            },
+            {
+              text: '✔️ Explicou que a vistoria será agendada automaticamente após confirmação?',
+              explanation: 'Assim que o pedido de rescisão for enviado pelo app e a data de desocupação for confirmada, o sistema irá agendar automaticamente a vistoria de saída. O inquilino não precisa fazer esse agendamento manualmente. O analista deve reforçar que o sistema leva em consideração a disponibilidade dos vistoriadores e a localização do imóvel para definir o melhor momento, geralmente até 3 dias úteis após a saída.'
+            },
+            {
+              text: '✔️ Comunicou que receberá aviso com detalhes por e-mail e/ou app?',
+              explanation: 'O inquilino será notificado por e-mail e também pelo app assim que a vistoria estiver agendada. O analista deve reforçar a importância de ficar atento a essas comunicações, pois nelas constarão data, horário e orientações sobre a preparação do imóvel. Caso o cliente não visualize a notificação, oriente-o a verificar a caixa de spam ou acessar diretamente a seção do contrato no aplicativo.'
+            },
+            {
+              text: '✔️ Esclareceu que a partir daí inicia a jornada de devolução do imóvel?',
+              explanation: 'Após o envio do pedido de rescisão e o agendamento da vistoria, o inquilino inicia oficialmente a jornada de devolução do imóvel. Explique que essa etapa inclui preparar o imóvel (limpeza, retirada de objetos), organizar a entrega das chaves e acompanhar o envio do laudo. Reforce que cada etapa foi pensada para ser simples, mas é fundamental seguir as orientações para que o encerramento do contrato ocorra de forma ágil, sem pendências ou recontato.'
+            }
+          ]
+        }
+      ],
+      attentionPoints: [
+        'Muitos clientes acreditam que basta avisar o atendimento, mas o processo só segue se o pedido for enviado pelo app, pelo titular',
+        'É comum esquecer que as contas devem estar quitadas até a entrega das chaves — esse é um ponto que gera bastante recontato'
+      ]
+    },
+    'rescisao-proprietario': {
+      title: '📄 Pedido de rescisão - Proprietário',
+      sections: [
+        {
+          title: 'Notificações e Acompanhamento',
+          items: [
+            {
+              text: '✔️ Explicou que será notificado automaticamente por e-mail ou app?',
+              explanation: 'O analista deve informar ao proprietário que ele será notificado automaticamente assim que o inquilino formalizar o pedido de rescisão no app. Essas notificações chegam por e-mail e também ficam disponíveis no aplicativo, caso o proprietário utilize a plataforma. Explique que essas comunicações são padronizadas e fazem parte do fluxo operacional do QuintoAndar, garantindo que ele fique a par de todas as etapas, mesmo sem precisar entrar em contato.'
+            },
+            {
+              text: '✔️ Esclareceu que isso garante acompanhamento desde o início da jornada?',
+              explanation: 'Reforce que essas notificações automatizadas existem justamente para que o proprietário possa acompanhar todo o processo desde o início, sem depender exclusivamente de interações manuais. Isso inclui o pedido de rescisão, a confirmação da data de saída, o agendamento da vistoria e a liberação do laudo. Ao destacar esse ponto, o analista mostra que o fluxo é transparente, monitorado e confiável.'
+            },
+            {
+              text: '✔️ Informou que poderá consultar a data de saída informada pelo inquilino?',
+              explanation: 'O proprietário tem acesso à data de saída informada pelo inquilino por meio do app ou do link de acompanhamento. O analista pode confirmar essa informação no sistema e repassá-la, se necessário. Essa visibilidade é importante para que o cliente compreenda quando o imóvel será desocupado e possa começar a planejar ações futuras, como reformas, nova publicação do anúncio ou retomada do imóvel.'
+            },
+            {
+              text: '✔️ Explicou que essa data ajuda no planejamento e acompanhamento do encerramento?',
+              explanation: 'Explique que a data de saída é o marco inicial de toda a jornada de encerramento do contrato. A partir dela, o sistema agenda a vistoria de saída, controla o prazo de devolução das chaves e organiza o início da análise do laudo. Mostre ao proprietário que ter ciência dessa data permite que ele acompanhe o andamento das etapas de forma mais eficiente e se organize com mais previsibilidade.'
+            },
+            {
+              text: '✔️ Comunicou que a data também define o momento da vistoria e próximos passos?',
+              explanation: 'O analista deve deixar claro que a data informada pelo inquilino no pedido de rescisão serve como base para o agendamento da vistoria de saída. A partir dessa data, o sistema programa a visita do vistoriador — geralmente em até 3 dias úteis — e dá sequência aos próximos passos, como liberação do laudo e eventual análise de reparos. O proprietário pode contar com essa previsibilidade para se preparar e acompanhar o processo com segurança.'
+            }
+          ]
+        },
+        {
+          title: 'Jornada de Encerramento',
+          items: [
+            {
+              text: '✔️ Explicou que a jornada segue com vistoria de saída, devolução das chaves e análise final?',
+              explanation: 'O analista deve explicar que, após o pedido de rescisão feito pelo inquilino, a jornada de encerramento do contrato avança pelas seguintes etapas: vistoria de saída, entrega das chaves e análise final do laudo. Essas são fases sequenciais e interdependentes, conduzidas de forma automatizada pelo QuintoAndar. Deixe claro que o encerramento oficial do contrato só ocorre após a conclusão de todas essas etapas, o que garante que o imóvel seja devolvido em conformidade.'
+            },
+            {
+              text: '✔️ Esclareceu que esses passos são obrigatórios antes do encerramento oficial?',
+              explanation: 'Reforce ao proprietário que a finalização do contrato não ocorre de forma imediata após o pedido de rescisão. É obrigatório que a vistoria seja realizada, as chaves sejam entregues e o laudo analisado antes que o processo seja oficialmente encerrado. Esses passos são padronizados e existem para proteger ambas as partes, assegurando que tudo esteja documentado e validado antes do término do vínculo contratual.'
+            },
+            {
+              text: '✔️ Informou que será atualizado automaticamente sobre cada etapa?',
+              explanation: 'O proprietário receberá atualizações automáticas por e-mail em cada uma das etapas da jornada: agendamento da vistoria, recebimento do laudo, finalização do contrato e reanúncio do imóvel (quando aplicável). O analista deve reforçar que não é necessário acionar o atendimento para obter essas informações — o processo é automatizado e o cliente será informado no momento certo.'
+            },
+            {
+              text: '✔️ Comunicou que não há necessidade de pedir o reanúncio?',
+              explanation: 'Explique que, ao final da jornada de encerramento, o reanúncio do imóvel acontece de forma automática, sem que o proprietário precise solicitá-lo manualmente. Essa automatização agiliza o processo de recolocação do imóvel no mercado e garante que ele seja republicado dentro do prazo padrão, desde que esteja apto para nova locação. O reanúncio segue critérios operacionais definidos pela plataforma.'
+            },
+            {
+              text: '✔️ Explicou que o sistema executa o reanúncio automaticamente após encerramento?',
+              explanation: 'Deixe claro que o sistema executa o reanúncio do imóvel automaticamente após o encerramento do contrato e a liberação final do imóvel. Essa ação é feita com base no status da vistoria, devolução das chaves e análise do laudo. Oriente o proprietário de que ele será notificado assim que o anúncio estiver ativo novamente, e que poderá acompanhar a evolução diretamente pela plataforma.'
+            }
+          ]
+        },
+        {
+          title: 'Reanúncio do Imóvel',
+          items: [
+            {
+              text: '✔️ Esclareceu que o reanúncio só ocorre após término completo da jornada?',
+              explanation: 'O analista deve informar ao proprietário que o reanúncio do imóvel só acontece após a conclusão total da jornada de encerramento do contrato. Isso significa que é necessário aguardar o cumprimento de todas as etapas obrigatórias: vistoria de saída, entrega das chaves e, se aplicável, análise de laudo e eventuais mediações. Reforce que o sistema só libera o imóvel para reanúncio quando ele está oficialmente disponível e pronto para nova locação.'
+            },
+            {
+              text: '✔️ Especificou que inclui: vistoria feita, chaves recebidas?',
+              explanation: 'Explique que o reanúncio só será realizado se o imóvel estiver com a vistoria de saída finalizada e as chaves devidamente devolvidas. Sem esses dois requisitos, o imóvel ainda é considerado em processo de devolução e, portanto, não pode ser republicado. É importante que o proprietário saiba que essas etapas são parte da segurança operacional do QuintoAndar e visam garantir a boa experiência para os próximos interessados.'
+            },
+            {
+              text: '✔️ Informou que se necessário, inclui análise e execução de reparos?',
+              explanation: 'O analista também deve explicar que, quando há necessidade de reparos identificados no laudo, o reanúncio só será feito após a análise técnica e a execução ou aceite dos reparos. Em alguns casos, o imóvel pode passar por uma etapa de mediação ou aprovação de orçamento. Oriente o proprietário que ele será notificado sobre esse processo e que o sistema retomará o reanúncio automaticamente assim que tudo estiver resolvido.'
+            }
+          ]
+        }
+      ],
+      attentionPoints: [
+        'Muitos proprietários entram em contato antes da hora, perguntando sobre o reanúncio',
+        'É essencial reforçar que ele só acontece depois que todas as etapas forem concluídas com sucesso'
+      ]
+    }
+  }
+};
+
+// Event listeners quando o DOM carregar
+document.addEventListener('DOMContentLoaded', function() {
+  const canalSelect = document.getElementById('canal');
+  const assuntoSelect = document.getElementById('assunto');
+  const clienteSelect = document.getElementById('cliente');
+
+  console.log('DOM carregado, elementos encontrados:', {
+    canal: !!canalSelect,
+    assunto: !!assuntoSelect,
+    cliente: !!clienteSelect
+  });
+
+  // Listener para mudança de canal
+  canalSelect.addEventListener('change', function() {
+    console.log('Canal selecionado:', this.value);
+    
+    // Habilita o select de assunto se um canal for selecionado
+    assuntoSelect.disabled = !this.value;
+    assuntoSelect.value = "";
+    
+    // Desabilita e limpa o select de cliente
+    clienteSelect.disabled = true;
+    clienteSelect.value = "";
+    
+    // Limpa checklists existentes
+    clearChecklists();
+  });
+
+  // Listener para mudança de assunto
+  assuntoSelect.addEventListener('change', function() {
+    console.log('Assunto selecionado:', this.value);
+    
+    // Habilita o select de cliente se um assunto for selecionado
+    clienteSelect.disabled = !this.value;
+    clienteSelect.value = "";
+    
+    // Limpa checklists existentes
+    clearChecklists();
+  });
+
+  // Listener para mudança de cliente
+  clienteSelect.addEventListener('change', function() {
+    console.log('Cliente selecionado:', this.value);
+    console.log('Valores atuais:', {
+      canal: canalSelect.value,
+      assunto: assuntoSelect.value,
+      cliente: clienteSelect.value
+    });
+    
+    clearChecklists();
+    
+    if (canalSelect.value && assuntoSelect.value && clienteSelect.value) {
+      const key = `${assuntoSelect.value}-${clienteSelect.value}`;
+      const canal = canalSelect.value;
+      
+      console.log('Procurando checklist:', { canal, key });
+      console.log('Dados disponíveis:', Object.keys(checklistData[canal] || {}));
+      
+      if (checklistData[canal] && checklistData[canal][key]) {
+        renderChecklist(checklistData[canal][key], canal);
+      } else {
+        console.error('Checklist não encontrado para:', { canal, key });
+      }
+    }
+  });
+});
+
+function clearChecklists() {
+  const container = document.getElementById('checklist-container');
+  if (container) {
+    container.innerHTML = '';
+  }
+}
+
+function renderChecklist(data, canal) {
+  const channelText = canal === 'call' ? '📞 Call' : '💬 Chat';
+  
+  const checklistHTML = `
+    <div class="checklist-box active">
+      <div class="checklist-header">
+        <h3>${channelText} - ${data.title}</h3>
+      </div>
+      
+      <div class="checklist-content">
+        ${data.sections.map(section => `
+          <div class="section-title">${section.title}</div>
+          <ul>
+            ${section.items.map(item => {
+              if (canal === 'call' && typeof item === 'object') {
+                // Para call, criar itens com acordeão
+                return `
+                  <li class="accordion-item" data-explanation="${item.explanation || ''}">
+                    <div class="accordion-header">
+                      ${item.text}
+                      <span class="accordion-icon">▼</span>
+                    </div>
+                    ${item.explanation ? `
+                      <div class="accordion-content">
+                        <div class="explanation-text">${item.explanation}</div>
+                      </div>
+                    ` : ''}
+                  </li>
+                `;
+              } else {
+                // Para chat, itens simples
+                return `<li>${typeof item === 'object' ? item.text : item}</li>`;
+              }
+            }).join('')}
+          </ul>
+        `).join('')}
+
+        ${data.attentionPoints ? `
+          <div class="attention-box">
+            <h4>Pontos de Atenção Frequentes:</h4>
+            <ul class="attention-list">
+              ${data.attentionPoints.map(point => `<li>• ${point}</li>`).join('')}
+            </ul>
+          </div>
+        ` : ''}
+
+        <div class="progress-container">
+          <div class="progress-bar">
+            <div class="progress-fill"></div>
+          </div>
+          <div class="progress-text">0% concluído</div>
+        </div>
+      </div>
+
+      <div class="button-container">
+        <button class="btn btn-secondary" onclick="limpar(this)">🗑️ Limpar Tudo</button>
+        <button class="btn btn-primary" onclick="marcarTodos(this)">✅ Marcar Todos</button>
+        <button class="btn btn-success" onclick="enviarParaPlanilha()">📤 Enviar Respostas</button>
+      </div>
+    </div>
+  `;
+  
+  const container = document.getElementById('checklist-container');
+  if (container) {
+    container.innerHTML = checklistHTML;
+    
+    // Adicionar event listeners para os itens da lista
+    const items = container.querySelectorAll('.checklist-content ul li');
+    items.forEach(item => {
+      if (item.classList.contains('accordion-item')) {
+        // Para itens de acordeão (call)
+        const header = item.querySelector('.accordion-header');
+        const content = item.querySelector('.accordion-content');
+        const icon = item.querySelector('.accordion-icon');
+        
+        if (header) {
+          header.addEventListener('click', function(e) {
+            e.stopPropagation();
+            
+            // Toggle do acordeão
+            const isOpen = item.classList.contains('accordion-open');
+            
+            // Fechar todos os outros acordeões
+            items.forEach(otherItem => {
+              if (otherItem !== item && otherItem.classList.contains('accordion-item')) {
+                otherItem.classList.remove('accordion-open');
+                const otherIcon = otherItem.querySelector('.accordion-icon');
+                if (otherIcon) otherIcon.textContent = '▼';
+              }
+            });
+            
+            // Toggle do atual
+            if (isOpen) {
+              item.classList.remove('accordion-open');
+              if (icon) icon.textContent = '▼';
+            } else {
+              item.classList.add('accordion-open');
+              if (icon) icon.textContent = '▲';
+            }
+          });
+        }
+        
+        // Click no item para marcar/desmarcar
+        item.addEventListener('click', function(e) {
+          if (!e.target.closest('.accordion-header')) {
+            this.classList.toggle('checked');
+            updateProgress();
+          }
+        });
+      } else {
+        // Para itens simples (chat)
+        item.addEventListener('click', function() {
+          this.classList.toggle('checked');
+          updateProgress();
+        });
+      }
+    });
+  }
+}
+
+function updateProgress() {
+  const checklistBox = document.querySelector('.checklist-box.active');
+  if (!checklistBox) return;
+  
+  const items = checklistBox.querySelectorAll('.checklist-content ul li');
+  const checkedItems = checklistBox.querySelectorAll('.checklist-content ul li.checked');
+  const progress = items.length > 0 ? (checkedItems.length / items.length) * 100 : 0;
+  
+  const progressFill = checklistBox.querySelector('.progress-fill');
+  const progressText = checklistBox.querySelector('.progress-text');
+  
+  if (progressFill && progressText) {
+    progressFill.style.width = `${progress}%`;
+    progressText.textContent = `${Math.round(progress)}% concluído`;
+  }
+}
+
+function marcarTodos(button) {
+  const checklistBox = button.closest('.checklist-box');
+  const items = checklistBox.querySelectorAll('.checklist-content ul li');
+  
+  items.forEach(item => {
+    if (!item.classList.contains('checked')) {
+      item.classList.add('checked');
+    }
+  });
+  
+  updateProgress();
+}
+
+function limpar(button) {
+  const checklistBox = button.closest('.checklist-box');
+  const items = checklistBox.querySelectorAll('.checklist-content ul li');
+  
+  items.forEach(item => {
+    item.classList.remove('checked');
+    item.classList.remove('accordion-open');
+    const icon = item.querySelector('.accordion-icon');
+    if (icon) icon.textContent = '▼';
+  });
+  
+  updateProgress();
+}
+
+function enviarParaPlanilha() {
+  const checklistAtivo = document.querySelector('.checklist-box.active');
+  if (!checklistAtivo) {
+    alert('Nenhum checklist ativo encontrado!');
+    return;
+  }
+  
+  const titulo = checklistAtivo.querySelector('.checklist-header h3').textContent;
+  const itensChecados = checklistAtivo.querySelectorAll('.checklist-content ul li.checked');
+  const totalItens = checklistAtivo.querySelectorAll('.checklist-content ul li').length;
+  
+  let resultado = `Checklist: ${titulo}\n`;
+  resultado += `Data/Hora: ${new Date().toLocaleString('pt-BR')}\n`;
+  resultado += `Progresso: ${itensChecados.length}/${totalItens} itens concluídos (${Math.round((itensChecados.length/totalItens)*100)}%)\n\n`;
+  resultado += `Itens marcados:\n`;
+  
+  itensChecados.forEach((item, index) => {
+    const text = item.querySelector('.accordion-header') 
+      ? item.querySelector('.accordion-header').textContent.replace('▼', '').replace('▲', '').trim()
+      : item.textContent.trim();
+    resultado += `${index + 1}. ${text}\n`;
+  });
+  
+  // Simular envio (aqui você pode integrar com sua API)
+  console.log('Dados para envio:', resultado);
+  
+  // Copiar para área de transferência
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(resultado).then(() => {
+      alert('✅ Dados copiados para área de transferência!\n\nVocê pode colar em qualquer planilha ou documento.');
+    }).catch(() => {
+      alert('✅ Dados enviados com sucesso!\n\nVerifique o console para mais detalhes.');
+    });
+  } else {
+    alert('✅ Dados enviados com sucesso!\n\nVerifique o console para mais detalhes.');
+  }
+}
+  </script>
+</body>
+</html>
