@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -1274,32 +1275,42 @@ function limpar(button) {
   updateProgress();
 }
 
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzetBxO4DVhNLTNp4-NdlXLzo46S0EVkwEO95w2iSAEi4R5H7cAnQhoadsEMjibjbHX/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwDGbC6D-JzKWiiTsKtgaR1AFRl53d0mtcTR8LI9Uw5cETug33j217kodVKbVS6TmQc/exec";
+  const SECRET_KEY = "chave-super-secreta";
 
-// função para enviar dados
-async function enviarParaPlanilha() {
-  // Se preferir, troque por inputs fixos no formulário
-  const ticket = prompt("Digite o número do Ticket:") || "";
-  const re     = prompt("Digite o seu RE:") || "";
+  async function enviar() {
+    const analista = document.getElementById("analista").value;
+    const ticket = document.getElementById("ticket").value;
+    const tipo = document.getElementById("tipo").value;
 
-  const canal   = document.getElementById("canal")?.value || "";
-  const assunto = document.getElementById("assunto")?.value || "";
-  const cliente = document.getElementById("cliente")?.value || "";
+    // pega os checkboxes renderizados no checklist
+    const checkboxes = document.querySelectorAll("#checklist input[type=checkbox]");
+    const respostas = Array.from(checkboxes).map(chk => chk.checked);
+    const totalItens = checkboxes.length; // <<-- total dinâmico
 
-  const itens = document.querySelectorAll(".checklist-content ul li");
-  const respostas = [];
-  itens.forEach(li => { if (li.classList.contains("checked")) respostas.push(li.textContent.trim()); });
+    // gera token de segurança
+    const token = btoa(SECRET_KEY + ticket + analista);
 
-  const params = new URLSearchParams({
-    ticket, re, canal, assunto, cliente,
-    respostas: respostas.join(" | ")
-  });
+    const payload = {
+      action: "save",
+      analista,
+      ticket,
+      tipoAtendimento: tipo,
+      respostas: JSON.stringify(respostas),
+      totalItens,   // <<-- envia o total calculado
+      token
+    };
 
-  // Dispara a gravação sem travar no CORS
-  fetch(`${SCRIPT_URL}?${params.toString()}`, { method: "GET", mode: "no-cors" });
+    // dispara requisição sem aguardar resposta
+    fetch(SCRIPT_URL, {
+      method: "POST",
+      mode: "no-cors",  // <<-- evita CORS
+      body: JSON.stringify(payload)
+    });
 
-  alert("Respostas enviadas! ✅");
-}
+    // mensagem local de confirmação
+    alert("Checklist enviado! ✅");
+  }
   </script>
 </body>
 </html>
