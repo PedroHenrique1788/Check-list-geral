@@ -1277,35 +1277,26 @@ function limpar(button) {
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzetBxO4DVhNLTNp4-NdlXLzo46S0EVkwEO95w2iSAEi4R5H7cAnQhoadsEMjibjbHX/exec";
 
 // função para enviar dados
-function enviarParaPlanilha() {
-  const ticket = prompt("Digite o número do Ticket:");
-  const re = prompt("Digite o seu RE:");
+async function enviarParaPlanilha() {
+  // Se preferir, troque por inputs fixos no formulário
+  const ticket = prompt("Digite o número do Ticket:") || "";
+  const re     = prompt("Digite o seu RE:") || "";
 
-  const canal = document.getElementById("canal").value;
-  const assunto = document.getElementById("assunto").value;
-  const cliente = document.getElementById("cliente").value;
+  const canal   = document.getElementById("canal")?.value || "";
+  const assunto = document.getElementById("assunto")?.value || "";
+  const cliente = document.getElementById("cliente")?.value || "";
 
   const itens = document.querySelectorAll(".checklist-content ul li");
   const respostas = [];
-  itens.forEach(item => {
-    if (item.classList.contains("checked")) {
-      respostas.push(item.textContent.trim());
-    }
-  });
+  itens.forEach(li => { if (li.classList.contains("checked")) respostas.push(li.textContent.trim()); });
 
   const params = new URLSearchParams({
-    ticket,
-    re,
-    canal,
-    assunto,
-    cliente,
+    ticket, re, canal, assunto, cliente,
     respostas: respostas.join(" | ")
   });
 
-  fetch(`${SCRIPT_URL}?${params.toString()}`, {
-    method: "GET",
-    mode: "no-cors" // 🔹 não trava no navegador
-  });
+  // Dispara a gravação sem travar no CORS
+  fetch(`${SCRIPT_URL}?${params.toString()}`, { method: "GET", mode: "no-cors" });
 
   alert("Respostas enviadas! ✅");
 }
