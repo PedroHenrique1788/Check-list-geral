@@ -1355,7 +1355,7 @@ async function enviarParaPlanilha() {
     
     // Fazer requisição
     const response = await fetch(SCRIPT_URL, {
-      method: "GET",
+      method: "POST",
       mode: "no-cors", // Usar CORS para receber resposta
       headers: {
         "Content-Type": "application/json",
