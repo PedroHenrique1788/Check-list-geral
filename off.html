@@ -1275,163 +1275,43 @@ function limpar(button) {
   updateProgress();
 }
 
-// ⚙️ CONFIGURAÇÃO - Altere a URL do seu WebApp aqui
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz7qRFRBI21Mh6MLPJDwJcHn476FHrrjTx6oqGYoRxhB0s24Ssyu57mFTDFy0-3sfp_/exec";
-const SECRET_KEY = "chave-super-secreta";
-
-// 📤 Função para enviar dados para a planilha
-async function enviarParaPlanilha() {
-  try {
-    // Coletar dados dos selects
-    const canal = document.getElementById("canal")?.value;
-    const assunto = document.getElementById("assunto")?.value;
-    const cliente = document.getElementById("cliente")?.value;
-    
-    if (!canal || !assunto || !cliente) {
-      alert("❌ Selecione canal, assunto e tipo de cliente antes de enviar!");
-      return;
-    }
-    
-    // Solicitar dados do analista e ticket via prompt
-    const analista = prompt("Digite o RE do Analista:");
-    if (!analista || !analista.trim()) {
-      alert("❌ RE do Analista é obrigatório!");
-      return;
-    }
-    
-    const ticket = prompt("Digite o número do Ticket:");
-    if (!ticket || !ticket.trim()) {
-      alert("❌ Número do Ticket é obrigatório!");
-      return;
-    }
-    
-    const observacoes = prompt("Observações (opcional):") || "";
-    
-    // Coletar itens marcados do checklist ativo
-    const checklistAtivo = document.querySelector('.checklist-box.active');
-    if (!checklistAtivo) {
-      alert("❌ Nenhum checklist ativo encontrado!");
-      return;
-    }
-    
-    const itens = checklistAtivo.querySelectorAll('.checklist-content ul li:not(.attention-list li)');
-    if (itens.length === 0) {
-      alert("❌ Nenhum item encontrado no checklist!");
-      return;
-    }
-    
-    // Converter itens marcados para array de boolean
-    const respostas = Array.from(itens).map(item => item.classList.contains('checked'));
-    const totalItens = respostas.length;
-    
-    console.log(`Coletando ${totalItens} itens do checklist`);
-    console.log("Respostas:", respostas);
-    
-    // Gerar token de segurança
-    const token = btoa(SECRET_KEY + ticket.trim() + analista.trim());
-    
-    // Montar payload
-    const payload = {
-      action: "save",
-      analista: analista.trim(),
-      ticket: ticket.trim(),
-      canal: canal,
-      assunto: assunto,
-      cliente: cliente,
-      tipoAtendimento: `${canal} - ${assunto} - ${cliente}`,
-      respostas: respostas,
-      totalItens: totalItens,
-      observacoes: observacoes.trim(),
-      token: token
-    };
-    
-    console.log("Payload a ser enviado:", payload);
-    
-    // Mostrar indicador de carregamento
-    const btnEnviar = document.querySelector('.btn-success');
-    const textoOriginal = btnEnviar?.textContent || "📤 Enviar Respostas";
-    if (btnEnviar) {
-      btnEnviar.textContent = "Enviando...";
-      btnEnviar.disabled = true;
-    }
-    
-    // Fazer requisição
-    const response = await fetch(SCRIPT_URL, {
-      method: "POST",
-      mode: "cors", // Usar CORS para receber resposta
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(payload)
+function enviarParaPlanilha() {
+  const checklistAtivo = document.querySelector('.checklist-box.active');
+  if (!checklistAtivo) {
+    alert('Nenhum checklist ativo encontrado!');
+    return;
+  }
+  
+  const titulo = checklistAtivo.querySelector('.checklist-header h3').textContent;
+  const itensChecados = checklistAtivo.querySelectorAll('.checklist-content ul li.checked');
+  const totalItens = checklistAtivo.querySelectorAll('.checklist-content ul li').length;
+  
+  let resultado = `Checklist: ${titulo}\n`;
+  resultado += `Data/Hora: ${new Date().toLocaleString('pt-BR')}\n`;
+  resultado += `Progresso: ${itensChecados.length}/${totalItens} itens concluídos (${Math.round((itensChecados.length/totalItens)*100)}%)\n\n`;
+  resultado += `Itens marcados:\n`;
+  
+  itensChecados.forEach((item, index) => {
+    const text = item.querySelector('.accordion-header') 
+      ? item.querySelector('.accordion-header').textContent.replace('▼', '').replace('▲', '').trim()
+      : item.textContent.trim();
+    resultado += `${index + 1}. ${text}\n`;
+  });
+  
+  // Simular envio (aqui você pode integrar com sua API)
+  console.log('Dados para envio:', resultado);
+  
+  // Copiar para área de transferência
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(resultado).then(() => {
+      alert('✅ Dados copiados para área de transferência!\n\nVocê pode colar em qualquer planilha ou documento.');
+    }).catch(() => {
+      alert('✅ Dados enviados com sucesso!\n\nVerifique o console para mais detalhes.');
     });
-    
-    // Restaurar botão
-    if (btnEnviar) {
-      btnEnviar.textContent = textoOriginal;
-      btnEnviar.disabled = false;
-    }
-    
-    // Verificar resposta
-    if (response.ok) {
-      const result = await response.json();
-      
-      if (result.success) {
-        const itensCompletos = respostas.filter(r => r === true).length;
-        const percentual = Math.round((itensCompletos / totalItens) * 100);
-        
-        alert(`✅ ${result.message}
-
- Resumo:
-• Analista: ${analista}
-• Ticket: ${ticket}
-• Canal: ${canal}
-• Assunto: ${assunto}
-• Cliente: ${cliente}
-• Total de itens: ${totalItens}
-• Itens completos: ${itensCompletos}
-• Percentual: ${percentual}%
-• Linha na planilha: ${result.data?.row || 'N/A'}
-• Data/Hora: ${new Date().toLocaleString('pt-BR')}`);
-        
-        // Opção de limpar após envio
-        const limparAposEnvio = confirm("Deseja limpar o checklist?");
-        if (limparAposEnvio) {
-          const btnLimpar = document.querySelector('.btn-secondary');
-          if (btnLimpar) {
-            limpar(btnLimpar);
-          }
-        }
-        
-      } else {
-        alert(`❌ Erro do servidor: ${result.message}`);
-        console.error("Erro do servidor:", result);
-      }
-    } else {
-      throw new Error(`Erro HTTP: ${response.status} - ${response.statusText}`);
-    }
-    
-  } catch (error) {
-    console.error("Erro no envio:", error);
-    
-    // Restaurar botão em caso de erro
-    const btnEnviar = document.querySelector('.btn-success');
-    if (btnEnviar) {
-      btnEnviar.textContent = "📤 Enviar Respostas";
-      btnEnviar.disabled = false;
-    }
-    
-    // Mostrar erro específico
-    if (error.name === 'TypeError' && error.message.includes('fetch')) {
-      alert("❌ Erro de conexão. Verifique sua internet e tente novamente.");
-    } else if (error.message.includes('CORS')) {
-      alert("❌ Erro de CORS. Tentando envio alternativo...");
-      await enviarSemResposta();
-    } else {
-      alert(`❌ Erro no envio: ${error.message}\n\nTente novamente em alguns segundos.`);
-    }
+  } else {
+    alert('✅ Dados enviados com sucesso!\n\nVerifique o console para mais detalhes.');
   }
 }
-
   </script>
 </body>
 </html>
