@@ -502,8 +502,8 @@
           <label for="canal">Escolha o canal:</label>
           <select id="canal" name="canal">
             <option value="">-- Selecione o canal --</option>
-            <option value="call">📞 Call (Ligações)</option>
-            <option value="chat">💬 Chat (Conversas)</option>
+            <option value="orientacao">Orientações</option>
+            <option value="chat">Macro</option>
           </select>
         </div>
         <div class="form-group">
@@ -512,6 +512,7 @@
             <option value="">-- Selecione o assunto --</option>
             <option value="vistoria">🏠 Vistoria de saída</option>
             <option value="rescisao">📄 Pedido de rescisão</option>
+            <option value="chaves">🔑 Entrega de chaves</option>
           </select>
         </div>
         <div class="form-group">
@@ -640,7 +641,7 @@ const checklistData = {
       ]
     }
   },
-  'call': {
+  'orientacao': {
     // Para call, as listas têm itens clicáveis com explicações
     'vistoria-inquilino': {
       title: '🏠 Vistoria de Saída - Inquilino',
@@ -743,7 +744,7 @@ const checklistData = {
             },
             {
               text: '✔️ Esclareceu que o vistoriador é um profissional credenciado?',
-              explanation: 'É essencial informar ao proprietário que a vistoria será feita por um vistoriador que é uma empresa parceira do QuintoAndar.. Ele segue um padrão de qualidade. O papel do vistoriado é registrar as condições do imóvel com imparcialidade e profissionalismo, assegurando uma análise justa e transparente para ambas as partes.'
+              explanation: 'É essencial informar ao proprietário que a vistoria será feita por um vistoriador profissional credenciado, treinado por uma empresa parceira do QuintoAndar. Ele segue um padrão técnico rigoroso, sem envolvimento emocional ou julgamentos subjetivos. Deixe claro que o papel do vistoriador é registrar as condições do imóvel com imparcialidade e profissionalismo, assegurando uma análise justa e transparente para ambas as partes.'
             },
             {
               text: '✔️ Explicou que será feito um relatório técnico sobre as condições do imóvel?',
@@ -964,7 +965,75 @@ const checklistData = {
         'Muitos proprietários entram em contato antes da hora, perguntando sobre o reanúncio',
         'É essencial reforçar que ele só acontece depois que todas as etapas forem concluídas com sucesso'
       ]
-    }
+    },
+    'chaves-inquilino': {
+      title: '🔑 Entrega de Chaves - Inquilino',
+      sections: [
+        {
+          title: 'Principais duvidas',
+          items: [
+            {
+              text: '✔️ Informou sobre onde e como deixar as chaves para a vistoria de saída?',
+              explanation: 'O inquilino deve registrar no aplicativo do QuintoAndar o local exato onde as chaves estarão disponíveis no dia da vistoria. Esse registro é feito em <b>Meu lar > Acompanhar finalização do contrato > Informe como vai entregar as chaves para a vistoria</b>. Caso o imóvel possua fechadura eletrônica, a senha de acesso deve ser informada nos comentários. Sem essa definição, o vistoriador pode não conseguir entrar no imóvel, atrasando a finalização da locação.'
+            },
+            {
+              text: '✔️ Orientou sobre o prazo para entrega das chaves?',
+              explanation: 'As chaves devem ser entregues até a data final do contrato ou, no máximo, no dia da vistoria de saída. Essa entrega é fundamental para permitir o acesso do vistoriador e garantir que o contrato seja encerrado no prazo. Caso não sejam disponibilizadas, o aluguel pode continuar sendo cobrado até a vistoria ser realizada.'
+            },
+            {
+              text: '✔️ Informou sobre a entrega de todos os itens de acesso junto com as chaves?',
+              explanation: 'Além das chaves principais do imóvel, é necessário deixar também tags de garagem, chaves de caixa de correio, controles remotos e demais acessos. Esses itens devem ser colocados em um local visível dentro do imóvel. A ausência de qualquer um deles pode gerar atrasos no encerramento do contrato.'
+            },
+            {
+              text: '✔️ Orientou sobre o que acontece se não permitir o acesso para a vistoria?',
+              explanation: 'Caso o vistoriador não consiga entrar no imóvel por falta de acesso ou ausência das chaves no local indicado, a vistoria será reagendada e o aluguel continuará sendo cobrado até que ela seja concluída.'
+            },
+            {
+              text: '✔️ Informou sobre o que fazer se o proprietário isentar a vistoria?',
+              explanation: 'Quando a vistoria de saída é dispensada pelo proprietário, o inquilino deve combinar diretamente com ele a forma e o local para devolução das chaves. É importante documentar esse acordo para evitar dúvidas posteriores.'
+            },
+            {
+              text: '✔️ Orientou sobre a importância das chaves para o encerramento do contrato?',
+              explanation: 'As chaves e demais itens de acesso são essenciais para que a vistoria ocorra e o contrato seja encerrado na data correta. Sem a entrega, há risco de cobrança adicional e atraso no término da locação.'
+            }
+          ]
+        },
+      ],
+    },
+    'chaves-proprietario': {
+      title: '🔑 Entrega de Chaves - Proprietário',
+      sections: [
+        {
+          title: 'Principais duvidas',
+          items: [
+            {
+              text: '✔️ Informou sobre o prazo para definir como deseja receber as chaves?',
+              explanation: 'Cinco dias antes do término do contrato, o QuintoAndar envia a solicitação para que o proprietário indique como prefere receber as chaves após a vistoria de saída. Essa definição agiliza a nova locação e evita atrasos na liberação do imóvel.'
+            },
+            {
+              text: '✔️ Confirmou todas as opções de recebimento das chaves?',
+              explanation: 'As chaves podem ser recebidas de diversas formas: senha para fechadura eletrônica, portaria do condomínio, lockbox do QuintoAndar, responsável indicado (zelador ou vizinho) ou envio por transportadora até 30 km do imóvel. É importante que essa escolha seja feita com antecedência e registrada no sistema.'
+            },
+            {
+              text: '✔️ O que fazer casos as chaves não forem encontradas no local definido?',
+              explanation: 'Se as chaves não forem encontradas no local definido, o QuintoAndar tentará reter e entrará em contato em até 3 dias úteis para combinar a entrega. Essa situação pode atrasar a liberação do imóvel para nova locação.'
+            },
+            {
+              text: '✔️ Informou sobre o prazo para receber as chaves após a vistoria?',
+              explanation: 'Após a vistoria de saída e entrega das chaves pelo inquilino, o prazo para liberação ao proprietário é de até 72 horas úteis, considerando a conferência do laudo, checagem dos itens de acesso e registro no sistema.'
+            },
+            {
+              text: '✔️ O que fazer caso os itens de acesso desapareçam? – <b>Somente em situações especificas</b>',
+              explanation: 'Caso o proprietário perceba que está sem algum item, como controle de garagem ou tag de acesso, deve verificar primeiro se esses itens estão dentro do imóvel. Se não estiverem, deve comentar no laudo de saída, preferencialmente na foto da porta de entrada, para que a equipe responsável possa investigar.'
+            },
+            {
+              text: '✔️ O que fazer em caso de chaves desaparecidas? – <b>Somente em situações especificas</b>',
+              explanation: 'Se durante a jornada de locação as chaves se perderem, o proprietário deve relatar o ocorrido. O analista abrirá uma solicitação para a equipe de Logística de Chaves de Vistoriadores, que dará retorno em até 4 dias uteis. O contato com o proprietário será feito por e-mail, informando os próximos passos.'
+            }
+          ]
+        }
+      ],
+    },
   }
 };
 
@@ -1043,7 +1112,7 @@ function clearChecklists() {
 }
 
 function renderChecklist(data, canal) {
-  const channelText = canal === 'call' ? '📞 Call' : '💬 Chat';
+  const channelText = canal === 'orientacao' ? '📞 Orientação' : '💬 Chat';
   
   const checklistHTML = `
     <div class="checklist-box active">
@@ -1241,6 +1310,59 @@ function enviarParaPlanilha() {
     });
   } else {
     alert('✅ Dados enviados com sucesso!\n\nVerifique o console para mais detalhes.');
+  }
+}
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyNVbhGRRa89bve2NZDRmqE_oTAvRXfIchV1DOHftnyDH7am9wxU41wSar25mVi4548/exec";
+
+// função para enviar dados
+async function enviarParaPlanilha() {
+  const ticket = prompt("Digite o número do Ticket:");
+  const re = prompt("Digite o seu RE:");
+
+  const canal = document.getElementById("canal").value;
+  const assunto = document.getElementById("assunto").value;
+  const cliente = document.getElementById("cliente").value;
+
+  const itens = document.querySelectorAll(".checklist-content ul li");
+  const respostas = [];
+  itens.forEach(item => {
+    if (item.classList.contains("checked")) {
+      respostas.push(item.textContent.trim());
+    }
+  });
+
+  const payload = {
+    ticket,
+    re,
+    canal,
+    assunto,
+    cliente,
+    respostas
+  };
+
+  try {
+    const res = await fetch(SCRIPT_URL, {
+      method: 'GET',
+      mode: 'no-cors'
+      body: JSON.stringify(payload),
+      headers: { "Content-Type": "application/json" }
+    });
+    const data = await res.json();
+    alert(data.message || "Enviado com sucesso!");
+  } catch (err) {
+    alert("Erro ao enviar: " + err);
+  }
+}
+
+// função para buscar dados já salvos
+async function carregarDados() {
+  try {
+    const res = await fetch(SCRIPT_URL);
+    const data = await res.json();
+    console.log("Dados recebidos:", data);
+    // Aqui você pode montar uma tabela na tela se quiser
+  } catch (err) {
+    console.error("Erro ao carregar dados:", err);
   }
 }
   </script>
