@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -1275,47 +1274,10 @@ function limpar(button) {
   updateProgress();
 }
 
-function enviarParaPlanilha() {
-  const checklistAtivo = document.querySelector('.checklist-box.active');
-  if (!checklistAtivo) {
-    alert('Nenhum checklist ativo encontrado!');
-    return;
-  }
-  
-  const titulo = checklistAtivo.querySelector('.checklist-header h3').textContent;
-  const itensChecados = checklistAtivo.querySelectorAll('.checklist-content ul li.checked');
-  const totalItens = checklistAtivo.querySelectorAll('.checklist-content ul li').length;
-  
-  let resultado = `Checklist: ${titulo}\n`;
-  resultado += `Data/Hora: ${new Date().toLocaleString('pt-BR')}\n`;
-  resultado += `Progresso: ${itensChecados.length}/${totalItens} itens concluídos (${Math.round((itensChecados.length/totalItens)*100)}%)\n\n`;
-  resultado += `Itens marcados:\n`;
-  
-  itensChecados.forEach((item, index) => {
-    const text = item.querySelector('.accordion-header') 
-      ? item.querySelector('.accordion-header').textContent.replace('▼', '').replace('▲', '').trim()
-      : item.textContent.trim();
-    resultado += `${index + 1}. ${text}\n`;
-  });
-  
-  // Simular envio (aqui você pode integrar com sua API)
-  console.log('Dados para envio:', resultado);
-  
-  // Copiar para área de transferência
-  if (navigator.clipboard) {
-    navigator.clipboard.writeText(resultado).then(() => {
-      alert('✅ Dados copiados para área de transferência!\n\nVocê pode colar em qualquer planilha ou documento.');
-    }).catch(() => {
-      alert('✅ Dados enviados com sucesso!\n\nVerifique o console para mais detalhes.');
-    });
-  } else {
-    alert('✅ Dados enviados com sucesso!\n\nVerifique o console para mais detalhes.');
-  }
-}
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyNVbhGRRa89bve2NZDRmqE_oTAvRXfIchV1DOHftnyDH7am9wxU41wSar25mVi4548/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx5L6V08c6NAu-U05ZXZ5XkiPMAJysgPm_Yowaa3rKK0z3RnJSn5jn8pXAyndEMb1MB/exec";
 
 // função para enviar dados
-async function enviarParaPlanilha() {
+function enviarParaPlanilha() {
   const ticket = prompt("Digite o número do Ticket:");
   const re = prompt("Digite o seu RE:");
 
@@ -1331,39 +1293,21 @@ async function enviarParaPlanilha() {
     }
   });
 
-  const payload = {
+  const params = new URLSearchParams({
     ticket,
     re,
     canal,
     assunto,
     cliente,
-    respostas
-  };
+    respostas: respostas.join(" | ")
+  });
 
-  try {
-    const res = await fetch(SCRIPT_URL, {
-      method: 'GET',
-      mode: 'no-cors'
-      body: JSON.stringify(payload),
-      headers: { "Content-Type": "application/json" }
-    });
-    const data = await res.json();
-    alert(data.message || "Enviado com sucesso!");
-  } catch (err) {
-    alert("Erro ao enviar: " + err);
-  }
-}
+  fetch(`${SCRIPT_URL}?${params.toString()}`, {
+    method: "GET",
+    mode: "no-cors" // 🔹 não trava no navegador
+  });
 
-// função para buscar dados já salvos
-async function carregarDados() {
-  try {
-    const res = await fetch(SCRIPT_URL);
-    const data = await res.json();
-    console.log("Dados recebidos:", data);
-    // Aqui você pode montar uma tabela na tela se quiser
-  } catch (err) {
-    console.error("Erro ao carregar dados:", err);
-  }
+  alert("Respostas enviadas! ✅");
 }
   </script>
 </body>
